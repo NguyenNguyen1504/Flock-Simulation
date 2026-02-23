@@ -1,4 +1,4 @@
-val scala3Version = "3.8.1"
+val scala3Version = "3.3.3"
 
 lazy val root = project
   .in(file("."))
@@ -11,4 +11,4 @@ lazy val root = project
     libraryDependencies += "org.scalameta" %% "munit" % "1.0.0" % Test
   )
 
-libraryDependencies += "org.scalafx" % "scalafx_3" % "22.0.0-R33"
+libraryDependencies += "org.scalafx" %% "scalafx" % "22.0.0-R33"
