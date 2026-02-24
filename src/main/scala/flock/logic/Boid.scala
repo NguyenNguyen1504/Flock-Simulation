@@ -1,17 +1,20 @@
 package flock.logic
 
-class Boid(position: Vector2D, velocity: Vector2D, acceleration: Vector2D):
+class Boid(var position: Vector2D, var velocity: Vector2D):
 
-  var pos = this.position
-  var v = this.velocity
-  var a = this.acceleration
+  private var acceleration = Vector2D(0,0)
 
   def distanceSquared(another: Boid): Double =
-    val vector = another.pos - this.pos
-    vector.magnitudeSquared()
-    
+    val toAnother = another.position - this.position
+    toAnother.magnitudeSquared()
+
+  def angle(another: Boid): Double =
+    val heading = this.velocity
+    val toAnother = another.position - this.position
+    heading.angle(toAnother)
+
   def apply(force: Vector2D): Unit = ???
-  
+
   def update(deltaTime: Double): Unit = ???
 
 end Boid

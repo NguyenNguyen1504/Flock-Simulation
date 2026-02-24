@@ -1,6 +1,7 @@
 package flock.logic
 
-class Constants:
+object Constants:
+  
   var perceptionRadius = 75
   var perceptionAngle = 120.toRadians
   var minSeparationDistance = 25
@@ -10,5 +11,6 @@ class Constants:
   var alignmentWeight = 1.0
   var cohesionWeight = 1.0
 
+end Constants
 
 
