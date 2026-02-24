@@ -10,7 +10,8 @@ object Constants:
   var separationWeight = 1.5
   var alignmentWeight = 1.0
   var cohesionWeight = 1.0
-
+  var mass = 1.0
+  
 end Constants
 
 
