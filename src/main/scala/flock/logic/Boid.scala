@@ -12,7 +12,7 @@ class Boid(var position: Vector2D, var velocity: Vector2D):
   def angle(another: Boid): Double =
     val heading = this.velocity
     val toAnother = another.position - this.position
-    heading.angle(toAnother)
+    math.abs(heading.angle(toAnother))
 
   def applyForce(force: Vector2D): Unit =
     this.steeringForce += force

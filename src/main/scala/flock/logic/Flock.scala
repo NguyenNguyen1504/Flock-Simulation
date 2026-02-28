@@ -17,7 +17,7 @@ class Flock(val boids: ArrayBuffer[Boid]):
     for boid <- this.boids do
       if boid != target then
         val dSquared = boid.distanceSquared(target)
-        val angle = boid.angle(target)
+        val angle = target.angle(boid)
         if dSquared <= rSquared && angle <= maxAngle then
           neighbors += boid
 
