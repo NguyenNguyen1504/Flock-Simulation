@@ -29,7 +29,7 @@ class Flock(val boids: ArrayBuffer[Boid]):
   def calculateAlignment(target: Boid): Vector2D = ???
 
   def calculateCohesion(target: Boid): Vector2D = ???
-
+  
   def update(deltaTime: Double): Unit = ???
 
 end Flock
