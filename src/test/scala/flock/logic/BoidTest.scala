@@ -5,7 +5,7 @@ import org.scalatest.matchers.should.Matchers
 
 class BoidTest extends AnyFlatSpec with Matchers:
 
-  "A Boid" should "correctly calculate the squared distance to another boid" in {
+  "Boid" should "correctly calculate the squared distance to another boid" in {
     val boid1 = Boid(Vector2D(4,3), Vector2D(3,3))
     val boid2 = Boid(Vector2D(0,0), Vector2D(2,1))
     boid1.distanceSquared(boid2) shouldBe 25

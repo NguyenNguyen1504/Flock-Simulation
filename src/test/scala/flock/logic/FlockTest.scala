@@ -7,7 +7,7 @@ import scala.collection.mutable.ArrayBuffer
 
 class FlockTest extends AnyFlatSpec with Matchers:
 
-  "A Flock" should "correctly add a new boid" in {
+  "Flock" should "correctly add a new boid" in {
     val boid0 = Boid(Vector2D(0,0), Vector2D(1,1))
     val boid1 = Boid(Vector2D(0,0), Vector2D(1,1))
     val boid2 = Boid(Vector2D(0,0), Vector2D(1,1))
@@ -48,7 +48,7 @@ class FlockTest extends AnyFlatSpec with Matchers:
     val flock = Flock(ArrayBuffer(target))
     flock.findNeighbors(target) shouldBe empty
   }
-  "Flock separation calculator" should "correctly calculate the separation weight from the neighborhood of the target boid" in {
+  "Flock.calculateSeparation" should "correctly calculate the separation weight from the neighborhood of the target boid" in {
     Constants.perceptionRadius = 100.0
     Constants.perceptionAngle = 140.toRadians
     Constants.minSeparationDistance = 50.0
@@ -73,7 +73,7 @@ class FlockTest extends AnyFlatSpec with Matchers:
   val flock = Flock(ArrayBuffer(target, boidFar))
   flock.calculateSeparation(target) shouldBe Vector2D(0, 0)
   }
-  "Flock alignment calculator" should "correctly calculate the alignment weight from the neighborhood of the target boid" in {
+  "Flock.calculateAlignment" should "correctly calculate the alignment weight from the neighborhood of the target boid" in {
   Constants.perceptionRadius = 100.0
   Constants.perceptionAngle = 120.toRadians
 
@@ -96,7 +96,7 @@ class FlockTest extends AnyFlatSpec with Matchers:
 
   flock.calculateAlignment(target) shouldBe Vector2D(0, 0)
   }
-  "Flock cohesion calculator" should "correctly calculate the cohesion weight from the neighborhood of the target boid" in {
+  "Flock.calculateCohesion" should "correctly calculate the cohesion weight from the neighborhood of the target boid" in {
   Constants.perceptionRadius = 50.0
   Constants.perceptionAngle = 120.toRadians
 
@@ -121,6 +121,60 @@ class FlockTest extends AnyFlatSpec with Matchers:
 
   result shouldBe Vector2D(0, 0)
  }
+  "Flock.update" should "move boids correctly based on velocity and deltaTime" in {
+    Constants.maxSpeed = 100.0
+    Constants.maxSteeringForce = 0.0
+
+    val boid = Boid(Vector2D(10, 10), Vector2D(5, -2))
+    val flock = Flock(ArrayBuffer(boid))
+
+    flock.update(2.0)
+
+    boid.position.x shouldBe 20.0
+    boid.position.y shouldBe 6.0
+  }
+
+  it should "apply combined steering forces from neighbors within perception" in {
+    Constants.perceptionRadius = 50.0
+    Constants.perceptionAngle = 360.0
+    Constants.separationWeight = 1.0
+    Constants.alignmentWeight = 1.0
+    Constants.cohesionWeight = 1.0
+    Constants.mass = 1.0
+    Constants.maxSteeringForce = 50.0
+
+    val target = Boid(Vector2D(0, 0), Vector2D(0, 0))
+    val neighbor = Boid(Vector2D(10, 0), Vector2D(0, 10))
+    val flock = Flock(ArrayBuffer(target, neighbor))
+
+    flock.update(1.0)
+
+    target.velocity.x should not be 0.0
+    target.velocity.y shouldBe > (0.0)
+  }
+
+  it should "strictly limit velocity to Constants.maxSpeed" in {
+    Constants.maxSpeed = 5.0
+    Constants.maxSteeringForce = 100.0
+
+    val boid = Boid(Vector2D(0, 0), Vector2D(10, 10))
+    val flock = Flock(ArrayBuffer(boid))
+
+    flock.update(0.1)
+
+    boid.velocity.magnitude() shouldBe <= (5.0 + 1e-9)
+  }
+
+  it should "handle edge case: multiple boids at the exact same position" in {
+    Constants.minSeparationDistance = 10.0
+    Constants.separationWeight = 1.0
+
+    val b1 = Boid(Vector2D(10, 10), Vector2D(0, 0))
+    val b2 = Boid(Vector2D(10, 10), Vector2D(0, 0))
+    val flock = Flock(ArrayBuffer(b1, b2))
+
+    noException should be thrownBy flock.update(1.0)
+  }
 
 end FlockTest
 

@@ -61,6 +61,14 @@ class Flock(val boids: ArrayBuffer[Boid]):
       centerOfMass - target.position
 
 
-  def update(deltaTime: Double): Unit = ???
+  def update(deltaTime: Double): Unit =
+    for boid <- this.boids do
+      val s = calculateSeparation(boid)  // Separation weight calculated based on neighborhood
+      val a = calculateAlignment(boid)   // Alignment weight calculated based on neighborhood
+      val c = calculateCohesion(boid)    // Cohesion weight calculated based on neighborhood
+      val steeringForce = s * Constants.separationWeight + a * Constants.alignmentWeight + c * Constants.cohesionWeight
+      boid.applyForce(steeringForce)
+    for boid <- this.boids do
+      boid.update(deltaTime)
 
 end Flock

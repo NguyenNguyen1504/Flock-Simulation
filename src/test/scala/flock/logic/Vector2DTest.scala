@@ -5,7 +5,7 @@ import org.scalatest.matchers.should.Matchers
 
 class Vector2DTest extends AnyFlatSpec with Matchers:
 
-  "Vector2D addition" should "correctly add Vector2Ds" in {
+  "Vector2D.+" should "correctly add Vector2Ds" in {
     val a = Vector2D(1.2, 3.4)
     val b = Vector2D(-3, 0)
     (a + b).x shouldBe -1.8 +- 0.0001
@@ -18,32 +18,32 @@ class Vector2DTest extends AnyFlatSpec with Matchers:
     (a + b) shouldBe Vector2D(1.2, 3.4)
   }
 
-  "Vector2D substraction" should "correctly subtract Vector2Ds" in {
+  "Vector2D.-" should "correctly subtract Vector2Ds" in {
     val a = Vector2D(1.2, 3.4)
     val b = Vector2D(-3, 0)
     (a - b).x shouldBe 4.2 +- 0.0001
     (a - b).y shouldBe 3.4 +- 0.0001
   }
 
-  "Vector2D multiplication" should "scale the vector correctly" in {
+  "Vector2D.*" should "scale the vector correctly" in {
     val a = Vector2D(1.5, -2.0)
     (a * 2.0) shouldBe Vector2D(3.0, -4.0)
     (a * 0.5) shouldBe Vector2D(0.75, -1.0)
   }
 
-  "Vector2D dot production" should "correctly dot product Vector2Ds" in {
+  "Vector2D.dot" should "correctly dot product Vector2Ds" in {
     val a = Vector2D(1.2, 3.4)
     val b = Vector2D(-3, 0)
     a.dot(b) shouldBe -3.6 +- 0.0001
   }
 
-  "A Vector2D" should "correctly calculate its magnitude and squared magnitude" in {
+  "Vector2D.magnitude" should "correctly calculate its magnitude and squared magnitude" in {
     val a = Vector2D(3.0, 4.0)
     a.magnitude() shouldBe 5.0 +- 0.0001
     a.magnitudeSquared() shouldBe 25.0 +- 0.0001
   }
 
-  "Vector2D normalization" should "return the normalized vector" in {
+  "Vector2D.normalize" should "return the normalized vector" in {
     val a = Vector2D(3.0, 4.0)
     val normalized = a.normalize()
     normalized.x shouldBe 0.6 +- 0.0001
@@ -63,7 +63,7 @@ class Vector2DTest extends AnyFlatSpec with Matchers:
     a.normalize() shouldBe a
   }
 
-  "Vector2D truncation" should "limit the magnitude if it exceeds maxLength" in {
+  "Vector2D.truncate" should "limit the magnitude if it exceeds maxLength" in {
     val a = Vector2D(10.0, 0.0)
     val truncated = a.truncate(5.0)
     truncated.magnitude() shouldBe 5.0 +- 0.0001
@@ -75,7 +75,7 @@ class Vector2DTest extends AnyFlatSpec with Matchers:
     a.truncate(10.0) shouldBe a
   }
 
-  "Vector2D angle" should "calculate the correct angle between vectors in radians" in {
+  "Vector2D.angle" should "calculate the correct angle between vectors in radians" in {
     val a = Vector2D(1, 0)
     val b = Vector2D(0, 1)
     a.angle(b) shouldBe (scala.math.Pi / 2) +- 0.0001
