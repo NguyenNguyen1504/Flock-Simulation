@@ -24,12 +24,43 @@ class Flock(val boids: ArrayBuffer[Boid]):
     neighbors
 
 
-  def calculateSeparation(target: Boid): Vector2D = ???
+  def calculateSeparation(target: Boid): Vector2D =
+    def takeSeparateVector(another: Boid): Vector2D =     // Calculates a repulsion vector inversely proportional to the squared distance
+      val toAnother = target.position - another.position
+      val r = toAnother.magnitudeSquared()
+      toAnother * (1.0 / r)
 
-  def calculateAlignment(target: Boid): Vector2D = ???
+    // Take all surrounding boids, not only the ones in the perception angle
+    val minDSquared = Constants.minSeparationDistance * Constants.minSeparationDistance
+    val closeNeighbors = boids.filter(b => b != target && b.distanceSquared(target) <= minDSquared)
 
-  def calculateCohesion(target: Boid): Vector2D = ???
-  
+    // Avoid UnsupportedOperationException
+    if closeNeighbors.isEmpty then
+      Vector2D(0,0)
+    else
+      closeNeighbors.map(takeSeparateVector(_)).reduce(_+_)
+
+
+  def calculateAlignment(target: Boid): Vector2D =
+    val neighbors = findNeighbors(target)
+    val numberOfNeighbors = neighbors.size
+    if numberOfNeighbors == 0 then
+      Vector2D(0,0)
+    else
+      val avgVelocity = (neighbors.map(_.velocity).reduce(_+_)) * (1.0/numberOfNeighbors)
+      avgVelocity - target.velocity
+
+
+  def calculateCohesion(target: Boid): Vector2D =
+    val neighbors = findNeighbors(target)
+    val numberOfNeighbors = neighbors.size
+    if numberOfNeighbors == 0 then
+      Vector2D(0,0)
+    else
+      val centerOfMass = (neighbors.map(_.position).reduce(_+_)) * (1.0/numberOfNeighbors)
+      centerOfMass - target.position
+
+
   def update(deltaTime: Double): Unit = ???
 
 end Flock

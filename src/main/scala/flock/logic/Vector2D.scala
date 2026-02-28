@@ -33,8 +33,11 @@ case class Vector2D(val x: Double, val y: Double):
 
   def angle(another: Vector2D): Double =
     val m = this.magnitude() * another.magnitude()
-    val cosAngle = ((this.dot(another)) / m).max(-1.0).min(1.0)
-    acos(cosAngle)
+    if m < 1e-10 then                 // Avoid dividing a number which is too small (~0)
+      0
+    else
+      val cosAngle = (this.dot(another) / m).max(-1.0).min(1.0)
+      acos(cosAngle)
 
   def magnitudeSquared(): Double =    // For faster calculation
     this.x * this.x + this.y * this.y

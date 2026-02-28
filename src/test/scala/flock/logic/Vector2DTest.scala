@@ -88,5 +88,13 @@ class Vector2DTest extends AnyFlatSpec with Matchers:
     val a = Vector2D(1.2, 3.4)
     a.angle(a) shouldBe 0.0 +- 0.0001
   }
+  it should "return 0 when one or both vectors are zero vectors" in {
+    val zero = Vector2D(0, 0)
+    val a = Vector2D(5, 5)
+
+    zero.angle(a) shouldBe 0.0
+    a.angle(zero) shouldBe 0.0
+    zero.angle(zero) shouldBe 0.0
+  }
 
 end Vector2DTest
