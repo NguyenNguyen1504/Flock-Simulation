@@ -4,10 +4,10 @@ import io.circe.generic.auto.*
 import io.circe.parser.*
 import io.circe.syntax.*
 
-import java.io.{File, PrintWriter, FileNotFoundException}
+import java.io.{File, FileNotFoundException, PrintWriter}
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
-import scala.util.{Try, Using}
+import scala.util.{Success, Try, Using}
 
 object FlockFileIO:
 
@@ -61,10 +61,32 @@ object FlockFileIO:
 
     }
 
+  private def loadFlockFromFile2(filename: String): Try[Flock] =
+    Try {
+      val jsonString = Using.resource(Source.fromFile(filename)) {
+                       source => source.mkString
+                       }
 
+      val boids = parse(jsonString)
+                 .flatMap(_.as[List[Boid]])
+                 .toTry.get
+      new Flock(ArrayBuffer.from(boids))
+    }
 
-end FlockFileIO
+  private def loadFlockFromFile3(filename: String): Try[Flock] =
+    for
+      // Read input to JSON string
+      jsonString <- Using(Source.fromFile(filename))(_.mkString)
+      // Parse input and decode into List[Boid], turn to Try
+      boids <- parse(jsonString).flatMap(_.as[List[Boid]]).toTry
+    yield
+      new Flock(ArrayBuffer.from(boids))
 
+  private def saveFlockToFile2(flock: Flock, filename: String): Try[Unit] =
+    Try(flock.boids.asJson.spaces2).                                  // Try turning list to JSON string
+      flatMap(flockData =>
+        Using(new PrintWriter(new File(filename)))(_.write(flockData))// Use a writer to write data into file
+    )
 
 
 
