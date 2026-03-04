@@ -4,9 +4,10 @@ import io.circe.generic.auto.*
 import io.circe.parser.*
 import io.circe.syntax.*
 
-import java.io.FileNotFoundException
+import java.io.{File, PrintWriter, FileNotFoundException}
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
+import scala.util.{Try, Using}
 
 object FlockFileIO:
 
@@ -48,7 +49,19 @@ object FlockFileIO:
         println(s"Unexpected system error: ${error.getMessage}")
         new Flock(ArrayBuffer.empty)
 
-  def saveFlockToFile(flock: Flock, filename: String): Unit = ???
+  def saveFlockToFile(flock: Flock, filename: String): Try[Unit] =
+    Try{
+
+      val flockData = flock.boids.asJson.spaces2
+      val file = new File(filename)
+
+      Using.resource(new PrintWriter(file)){
+        _.write(flockData)
+      }
+
+    }
+
+
 
 end FlockFileIO
 
