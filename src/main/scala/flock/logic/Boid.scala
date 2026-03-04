@@ -1,6 +1,6 @@
 package flock.logic
 
-class Boid(var position: Vector2D, var velocity: Vector2D):
+case class Boid(var position: Vector2D, var velocity: Vector2D):
 
   private var acceleration = Vector2D(0,0)
   private var steeringForce = Vector2D(0,0)
