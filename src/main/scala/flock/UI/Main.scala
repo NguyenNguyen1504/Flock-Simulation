@@ -1,19 +1,18 @@
 package flock.UI
 import scalafx.application.JFXApp3
-import scalafx.geometry.{Insets, Pos}
-import scalafx.scene.Scene
-import scalafx.scene.control.{Button, Label}
-import scalafx.scene.layout.{HBox, VBox}
 
 object Main extends JFXApp3:
 
   def start() =
     stage = new JFXApp3.PrimaryStage():
       title = "Flock Simulation"
-      height = 800
-      width = 800
+      height = 840
+      width = 840
+      minWidth = 800  // Giới hạn chiều rộng của Cửa sổ
+      minHeight = 650
       resizable = true
 
+    stage.scene = FlockScene
   end start
 
 end Main
