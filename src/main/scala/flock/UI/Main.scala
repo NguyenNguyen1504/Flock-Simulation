@@ -9,7 +9,7 @@ object Main extends JFXApp3:
       height = 840
       width = 840
       minWidth = 800  // Giới hạn chiều rộng của Cửa sổ
-      minHeight = 650
+      minHeight = 800
       resizable = true
 
     stage.scene = FlockScene

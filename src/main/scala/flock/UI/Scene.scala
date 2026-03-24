@@ -1,5 +1,6 @@
 package flock.UI
 
+import flock.logic.Boid
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control.{Button, Label}
@@ -9,17 +10,9 @@ import scalafx.scene.paint.Color
 object FlockScene extends Scene:
   val mainLayout = new BorderPane():
     padding = Insets(20,20,20,20)
-  
+
   // Flock window
-  val flockWindow = new Pane():
-    minWidth = 800
-    minHeight = 400
-    maxHeight = 400
-    background = new Background(Array(
-  new BackgroundFill(Color.color(0.871, 0.871, 0.847), CornerRadii.Empty, Insets(0))
-  ))
-    
-  
+  val flockWindow = new FlockWindow()
 
   // Control Panel
   val controlPanel = new HBox():
