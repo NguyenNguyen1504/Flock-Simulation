@@ -24,8 +24,8 @@ class FlockWindow extends Pane:
 
   def createBoidShapes(): Polygon =
     new Polygon:
-      points ++= Seq(0.0, 0.0, 12.0, 5.0, 0.0, 10.0)
-      fill = Color.White
+      points ++= Seq(-6.0, -5.0, 6.0, 0.0, -6.0, 5.0)
+      fill = Color.Black
 
   def sync(boids: ArrayBuffer[Boid]): Unit =
     val diff = boids.size - boidShapes.size

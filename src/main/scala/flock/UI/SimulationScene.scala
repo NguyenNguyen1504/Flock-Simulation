@@ -1,13 +1,17 @@
 package flock.UI
 
-import flock.logic.Boid
+import flock.logic.Flock
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control.{Button, Label}
-import scalafx.scene.layout.{Background, BackgroundFill, BorderPane, CornerRadii, HBox, Pane, VBox}
-import scalafx.scene.paint.Color
+import scalafx.scene.layout.{BorderPane, HBox}
 
-object FlockScene extends Scene:
+object SimulationScene extends Scene:
+  
+  def loadFlock(flock: Flock): Unit =
+    flockWindow.sync(flock.boids)
+    flockWindow.render(flock.boids)
+
   val mainLayout = new BorderPane():
     padding = Insets(20,20,20,20)
 
