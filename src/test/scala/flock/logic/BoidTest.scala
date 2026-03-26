@@ -37,6 +37,8 @@ class BoidTest extends AnyFlatSpec with Matchers:
   }
   it should "correctly update velocity and position when a force is applied" in {
     // Assume mass = 1.0, deltaTime = 1.0 for easy calculating
+    Constants.maxSteeringForce = 0.15
+    Constants.maxSpeed = 3.0
     val initialPos = Vector2D(0, 0)
     val initialVel = Vector2D(1, 0)
     val boid = Boid(initialPos, initialVel)

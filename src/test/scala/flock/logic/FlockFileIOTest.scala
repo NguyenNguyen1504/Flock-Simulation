@@ -27,19 +27,20 @@ class FlockFileIOTest extends AnyFlatSpec with Matchers:
   result.isFailure shouldBe true
   }
   it should "successfully save a flock to a new file" in {
-    val tempFile = "data/temp_save.json"
+    val tempFile = java.io.File.createTempFile("flock_test", ".json")
+    tempFile.deleteOnExit()
+    val filePath = tempFile.getPath
+
     val boids = ArrayBuffer(Boid(Vector2D(10, 20), Vector2D(1, 1)), Boid(Vector2D(20, 30), Vector2D(1.5, 1)))
     val flock = new Flock(boids)
 
-    val saveResult = FlockFileIO.saveFlockToFile(flock, tempFile)
+    val saveResult = FlockFileIO.saveFlockToFile(flock, filePath)
     saveResult.isSuccess shouldBe true
 
-    val savedFlock = FlockFileIO.loadFlockFromFile(tempFile).get
+    val savedFlock = FlockFileIO.loadFlockFromFile(filePath).get
     savedFlock.boids.head.position shouldBe Vector2D(10, 20)
 
-    val f = new File(tempFile)
-    f.exists() shouldBe true
-    f.delete()
+    tempFile.exists() shouldBe true
   }
 
 end FlockFileIOTest
