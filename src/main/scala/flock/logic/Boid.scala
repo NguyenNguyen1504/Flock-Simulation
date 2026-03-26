@@ -27,6 +27,12 @@ case class Boid(var position: Vector2D, var velocity: Vector2D):
     // Reset acceleration and steering force to their default values, ready for next loop
     this.acceleration = Vector2D(0,0)
     this.steeringForce = Vector2D(0,0)
+    
+    // Wrap-around
+    this.position = Vector2D(
+      (this.position.x + Constants.worldWidth) % Constants.worldWidth,
+      (this.position.y + Constants.worldHeight) % Constants.worldHeight
+    )
 
 end Boid
 
