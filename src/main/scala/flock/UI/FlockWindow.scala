@@ -44,7 +44,7 @@ class FlockWindow extends Pane:
     boids.zip(boidShapes).foreach { (boid, shape) =>
       shape.translateX = boid.position.x
       shape.translateY = boid.position.y
-      shape.rotate = math.toDegrees(boid.velocity.angle(Vector2D(1,0)))
+      shape.rotate = math.toDegrees(math.atan2(boid.velocity.y, boid.velocity.x))
     }
 
 
