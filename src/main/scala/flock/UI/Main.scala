@@ -1,5 +1,6 @@
 package flock.UI
 import flock.logic.{Flock, FlockFileIO}
+import scalafx.animation.AnimationTimer
 import scalafx.application.JFXApp3
 
 import scala.collection.mutable.ArrayBuffer
@@ -18,12 +19,24 @@ object Main extends JFXApp3:
       title = "Flock Simulation"
       height = 840
       width = 840
-      minWidth = 800  // Giới hạn chiều rộng của Cửa sổ
+      minWidth = 800
       minHeight = 800
       resizable = true
 
     SimulationScene.loadFlock(flock)
     stage.scene = SimulationScene
+
+    var lastTime = 0L
+    val timer = AnimationTimer( now =>
+      if lastTime != 0L then
+        val dt = (now - lastTime) / 1000000000.0
+        flock.update(dt)
+        SimulationScene.loadFlock(flock)
+      lastTime = now
+    )
+    timer.start()
+
+
   end start
 
 end Main
