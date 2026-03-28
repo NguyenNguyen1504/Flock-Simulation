@@ -28,7 +28,14 @@ class SliderSetting(val labelName: String, minValue: Double, maxValue: Double, i
   HBox.setHgrow(slider, Priority.Always) // Force slider to span
   slider.maxWidth = Double.MaxValue
 
-  children = Seq(titleLabel, slider)
+  val valueLabel = new Label(f"$initial%.1f"):
+    minWidth = 45
+    alignment = Pos.CenterLeft
+  slider.value.onChange((_, _, v) =>
+    valueLabel.text = f"${v.doubleValue()}%.1f"
+  )
+
+  children = Seq(titleLabel, slider, valueLabel)
 
   def onChange(action: Double => Unit) =
     slider.value.onChange((_, _, v) => action(v.doubleValue()))
