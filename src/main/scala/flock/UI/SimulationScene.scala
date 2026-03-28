@@ -21,9 +21,7 @@ object SimulationScene extends Scene:
     flockWindow.render(flock.boids)
 
   // Control Panel
-  val controlPanel = new HBox():
-    minWidth = 800
-    minHeight = 400
+  val controlPanel = new ControlPanel()
 
   mainLayout.center = flockWindow
   mainLayout.bottom = controlPanel
