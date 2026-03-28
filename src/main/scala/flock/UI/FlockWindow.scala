@@ -1,10 +1,10 @@
 package flock.UI
 
-import flock.logic.{Boid, Vector2D}
+import flock.logic.{Boid, Constants, Vector2D}
 import scalafx.geometry.Insets
 import scalafx.scene.Group
 import scalafx.scene.layout.{Background, BackgroundFill, CornerRadii, Pane}
-import scalafx.scene.shape.Polygon
+import scalafx.scene.shape.{Polygon, Rectangle}
 import scalafx.scene.paint.Color
 
 import scala.collection.mutable.ArrayBuffer
@@ -46,6 +46,12 @@ class FlockWindow extends Pane:
       shape.translateY = boid.position.y
       shape.rotate = math.toDegrees(math.atan2(boid.velocity.y, boid.velocity.x))
     }
+
+  val clipRectangle = new Rectangle:
+    width = Constants.worldWidth
+    height = Constants.worldHeight
+
+  this.clip = clipRectangle
 
 
 end FlockWindow

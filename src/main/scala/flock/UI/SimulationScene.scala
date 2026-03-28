@@ -7,16 +7,18 @@ import scalafx.scene.control.{Button, Label}
 import scalafx.scene.layout.{BorderPane, HBox}
 
 object SimulationScene extends Scene:
-  
-  def loadFlock(flock: Flock): Unit =
-    flockWindow.sync(flock.boids)
-    flockWindow.render(flock.boids)
 
   val mainLayout = new BorderPane():
     padding = Insets(20,20,20,20)
 
   // Flock window
-  val flockWindow = new FlockWindow()
+  val flockWindow = new FlockWindow()  
+  
+  def sync(flock: Flock): Unit =
+    flockWindow.sync(flock.boids)
+  
+  def render(flock: Flock): Unit =
+    flockWindow.render(flock.boids)
 
   // Control Panel
   val controlPanel = new HBox():

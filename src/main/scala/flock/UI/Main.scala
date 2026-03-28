@@ -23,7 +23,7 @@ object Main extends JFXApp3:
       minHeight = 800
       resizable = true
 
-    SimulationScene.loadFlock(flock)
+    SimulationScene.sync(flock)
     stage.scene = SimulationScene
 
     var lastTime = 0L
@@ -31,7 +31,7 @@ object Main extends JFXApp3:
       if lastTime != 0L then
         val dt = (now - lastTime) / 1000000000.0
         flock.update(dt)
-        SimulationScene.loadFlock(flock)
+        SimulationScene.render(flock)
       lastTime = now
     )
     timer.start()
