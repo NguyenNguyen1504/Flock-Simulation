@@ -1,7 +1,8 @@
 package flock.UI
-import flock.logic.{Flock, FlockFileIO}
+import flock.logic.{Constants, Flock, FlockFileIO}
 import scalafx.animation.AnimationTimer
 import scalafx.application.JFXApp3
+import scalafx.scene.control.Button
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.{Failure, Success}

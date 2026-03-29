@@ -12,26 +12,26 @@ class ControlPanel extends GridPane:
   vgap = 20
   padding = Insets(30)
 
-  val numberOfBirdsSetting = SpinnerSetting("Number of birds", 10, 200, 50)
+  val numberOfBirdsSetting    = SpinnerSetting("Number of birds", 10, 200, 50)
   val separationWeightSetting = SliderSetting("Separation weight", 0.0, 15.0, 5.0)
-  val alignmentWeightSetting = SliderSetting("Alignment weight", 0.0, 15.0, 3.0)
-  val cohesionWeightSetting = SliderSetting("Cohesion weight", 0.0, 15.0, 3.0)
+  val alignmentWeightSetting  = SliderSetting("Alignment weight", 0.0, 15.0, 3.0)
+  val cohesionWeightSetting   = SliderSetting("Cohesion weight", 0.0, 15.0, 3.0)
 
-  numberOfBirdsSetting.maxWidth = Double.MaxValue
+  numberOfBirdsSetting.maxWidth    = Double.MaxValue
   separationWeightSetting.maxWidth = Double.MaxValue
-  alignmentWeightSetting.maxWidth = Double.MaxValue
-  cohesionWeightSetting.maxWidth = Double.MaxValue
+  alignmentWeightSetting.maxWidth  = Double.MaxValue
+  cohesionWeightSetting.maxWidth   = Double.MaxValue
+
+  val startButton = new Button("START") { prefWidth = 100 }
+  val pauseButton = new Button("PAUSE") { prefWidth = 100 }
+  val resetButton = new Button("RESET") { prefWidth = 100 }
+  val quitButton  = new Button("QUIT")  { prefWidth = 100; style = "-fx-base: #ff4444;" }
+  val saveButton  = new Button("SAVE")  { prefWidth = 100 }
 
   val actionButtons = new VBox:
     spacing = 15
     alignment = Pos.Center
-    children = Seq(
-      new Button("START") { prefWidth = 100 },
-      new Button("PAUSE") { prefWidth = 100 },
-      new Button("RESET") { prefWidth = 100 },
-      new Button("QUIT")  { prefWidth = 100; style = "-fx-base: #ff4444;" },
-      new Button("SAVE")  { prefWidth = 100 }
-    )
+    children = Seq(startButton, pauseButton, resetButton, quitButton, saveButton)
 
   val rc = new RowConstraints:
     percentHeight = 25
