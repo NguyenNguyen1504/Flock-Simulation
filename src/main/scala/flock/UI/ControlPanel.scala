@@ -1,8 +1,9 @@
 package flock.UI
 
+import flock.logic.Constants
 import scalafx.geometry.{Insets, Pos, VPos}
 import scalafx.scene.control.Button
-import scalafx.scene.layout.{ColumnConstraints, GridPane, Priority, VBox, RowConstraints}
+import scalafx.scene.layout.{ColumnConstraints, GridPane, Priority, RowConstraints, VBox}
 
 class ControlPanel extends GridPane:
 
@@ -13,9 +14,9 @@ class ControlPanel extends GridPane:
   padding = Insets(30)
 
   val numberOfBirdsSetting    = SpinnerSetting("Number of birds", 10, 200, 50)
-  val separationWeightSetting = SliderSetting("Separation weight", 0.0, 15.0, 5.0)
-  val alignmentWeightSetting  = SliderSetting("Alignment weight", 0.0, 15.0, 3.0)
-  val cohesionWeightSetting   = SliderSetting("Cohesion weight", 0.0, 15.0, 3.0)
+  val separationWeightSetting = SliderSetting("Separation weight", 0.0, 15.0, Constants.separationWeight)
+  val alignmentWeightSetting  = SliderSetting("Alignment weight", 0.0, 15.0, Constants.alignmentWeight)
+  val cohesionWeightSetting   = SliderSetting("Cohesion weight", 0.0, 15.0, Constants.cohesionWeight)
 
   numberOfBirdsSetting.maxWidth    = Double.MaxValue
   separationWeightSetting.maxWidth = Double.MaxValue
