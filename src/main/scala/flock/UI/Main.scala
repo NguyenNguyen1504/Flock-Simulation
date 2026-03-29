@@ -1,8 +1,8 @@
 package flock.UI
+
 import flock.logic.{Constants, Flock, FlockFileIO}
 import scalafx.animation.AnimationTimer
 import scalafx.application.JFXApp3
-import scalafx.scene.control.Button
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.{Failure, Success}
@@ -35,10 +35,40 @@ object Main extends JFXApp3:
         SimulationScene.render(flock)
       lastTime = now
     )
-    timer.start()
 
+    // Wire UI → Logic
+
+    SimulationScene.onStart { timer.start() }
+
+    SimulationScene.onPause {
+      timer.stop()
+      lastTime = 0L
+    }
+
+    SimulationScene.onReset {
+      println("RESET: not implemented")
+      SimulationScene.sync(flock)
+    }
+
+    SimulationScene.onQuit { stage.close() }
+
+    SimulationScene.onSave {
+      FlockFileIO.saveFlockToFile(flock, "data/save.json") match
+        case Success(_) => println("Saved successfully")
+        case Failure(e) => println(s"Save failed: ${e.getMessage}")
+    }
+
+    SimulationScene.onNumberOfBirdsChange { n =>
+      println("RESIZE: not implemented")
+      SimulationScene.sync(flock)
+    }
+
+    SimulationScene.onSeparationWeightChange { w => Constants.separationWeight = w }
+    SimulationScene.onAlignmentWeightChange  { w => Constants.alignmentWeight  = w }
+    SimulationScene.onCohesionWeightChange   { w => Constants.cohesionWeight   = w }
+
+    timer.start()
 
   end start
 
 end Main
-
