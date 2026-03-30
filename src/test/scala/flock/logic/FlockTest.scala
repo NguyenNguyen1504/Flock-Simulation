@@ -176,6 +176,126 @@ class FlockTest extends AnyFlatSpec with Matchers:
     noException should be thrownBy flock.update(1.0)
   }
 
+  "Flock.addRandomBoid" should "increase the flock size by 1" in {
+    val flock = Flock(ArrayBuffer())
+    val initialSize = flock.boids.size
+    flock.addRandomBoid()
+    flock.boids.size shouldBe initialSize + 1
+  }
+
+  it should "place the boid within or on the boundaries of the world" in {
+    Constants.worldWidth = 800.0
+    Constants.worldHeight = 600.0
+    val flock = Flock(ArrayBuffer())
+    flock.addRandomBoid()
+    val boid = flock.boids.head
+
+    boid.position.x should (be >= 0.0 and be <= Constants.worldWidth)
+    boid.position.y should (be >= 0.0 and be <= Constants.worldHeight)
+  }
+
+  "Flock.removeRandomBoid" should "remove exactly one boid from a non-empty flock" in {
+    val boid1 = Boid(Vector2D(1, 1), Vector2D(1, 1))
+    val boid2 = Boid(Vector2D(2, 2), Vector2D(2, 2))
+    val flock = Flock(ArrayBuffer(boid1, boid2))
+
+    flock.removeRandomBoid()
+
+    flock.boids.size shouldBe 1
+    (flock.boids.contains(boid1) || flock.boids.contains(boid2)) shouldBe true
+  }
+
+  it should "do nothing and not throw an exception when the flock is empty" in {
+    val flock = Flock(ArrayBuffer())
+
+    noException should be thrownBy flock.removeRandomBoid()
+    flock.boids.size shouldBe 0
+  }
+
+  it should "eventually remove all boids if called repeatedly" in {
+    val flock = Flock(ArrayBuffer.fill(3)(Boid(Vector2D(0,0), Vector2D(1,1))))
+
+    flock.removeRandomBoid()
+    flock.removeRandomBoid()
+    flock.removeRandomBoid()
+
+    flock.boids shouldBe empty
+  }
+
+  "Flock.addRandomBoids" should "increase the flock size by n" in {
+    val flock = Flock(ArrayBuffer())
+    val n = 10
+    flock.addRandomBoids(n)
+    flock.boids.size shouldBe n
+  }
+  it should "not exceed Constants.maxFlockSize" in {
+    val flock = Flock(ArrayBuffer.fill(198)(Boid(Vector2D(0,0), Vector2D(1,1))))
+
+    flock.addRandomBoids(5)
+
+    flock.boids.size shouldBe Constants.maxFlockSize
+  }
+
+  "Flock.removeRandomBoids" should "decrease the flock size correctly" in {
+    val boids = ArrayBuffer.fill(15)(Boid(Vector2D(0,0), Vector2D(1,1)))
+    val flock = Flock(boids)
+    flock.removeRandomBoids(3)
+    flock.boids.size shouldBe 12
+  }
+
+  it should "not remove boids below Constants.minBoids" in {
+    val boids = ArrayBuffer.fill(15)(Boid(Vector2D(0,0), Vector2D(1,1)))
+    val flock = Flock(boids)
+    flock.removeRandomBoids(10)
+
+    flock.boids.size shouldBe Constants.minFlockSize
+  }
+
+  it should "not throw an error when trying to remove more boids than exist" in {
+    val flock = Flock(ArrayBuffer(Boid(Vector2D(0,0), Vector2D(1,1))))
+    noException should be thrownBy flock.removeRandomBoids(10)
+    flock.boids.size shouldBe 1
+  }
+
+  "Flock.resetWith" should "replace all current boids with a new set from a Seq" in {
+    val initialBoids = ArrayBuffer(Boid(Vector2D(10, 10), Vector2D(1, 1)))
+    val flock = Flock(initialBoids)
+
+    val newBoids = Seq(
+      Boid(Vector2D(100, 100), Vector2D(2, 2)),
+      Boid(Vector2D(200, 200), Vector2D(3, 3))
+    )
+
+    flock.resetWith(newBoids)
+
+    flock.boids.size shouldBe 2
+    flock.boids.head.position shouldBe Vector2D(100, 100)
+    flock.boids.last.position shouldBe Vector2D(200, 200)
+  }
+
+  it should "perform a deep copy to ensure original data remains unchanged" in {
+    val originalPos = Vector2D(50, 50)
+    val originalBoids = Seq(Boid(originalPos, Vector2D(1, 1)))
+    val flock = Flock(ArrayBuffer.empty)
+
+    flock.resetWith(originalBoids)
+
+    // Thay đổi vị trí của boid trong flock (đang mô phỏng)
+    flock.boids.head.position = Vector2D(999, 999)
+
+    // Kiểm tra xem dữ liệu gốc trong Seq có bị đổi theo không
+    originalBoids.head.position shouldBe Vector2D(50, 50)
+    originalBoids.head.position should not be flock.boids.head.position
+  }
+
+  it should "correctly clear the flock even if the new sequence is empty" in {
+    val flock = Flock(ArrayBuffer(Boid(Vector2D(0, 0), Vector2D(0, 0))))
+
+    flock.resetWith(Seq.empty)
+
+    flock.boids shouldBe empty
+  }
+
 end FlockTest
 
 
