@@ -66,7 +66,11 @@ object Main extends JFXApp3:
     }
 
     mainScene.onFlockSizeChange { n =>
-      println("RESIZE: not implemented")
+      val currentCount = flock.boids.size
+      if n > currentCount then
+        flock.addRandomBoids(n - currentCount)
+      else if n < currentCount then
+        flock.removeRandomBoids(currentCount - n)
       mainScene.sync(flock)
     }
 
