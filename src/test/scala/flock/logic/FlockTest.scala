@@ -194,6 +194,34 @@ class FlockTest extends AnyFlatSpec with Matchers:
     boid.position.y should (be >= 0.0 and be <= Constants.worldHeight)
   }
 
+  "Flock.removeRandomBoid" should "remove exactly one boid from a non-empty flock" in {
+    val boid1 = Boid(Vector2D(1, 1), Vector2D(1, 1))
+    val boid2 = Boid(Vector2D(2, 2), Vector2D(2, 2))
+    val flock = Flock(ArrayBuffer(boid1, boid2))
+
+    flock.removeRandomBoid()
+
+    flock.boids.size shouldBe 1
+    (flock.boids.contains(boid1) || flock.boids.contains(boid2)) shouldBe true
+  }
+
+  it should "do nothing and not throw an exception when the flock is empty" in {
+    val flock = Flock(ArrayBuffer())
+
+    noException should be thrownBy flock.removeRandomBoid()
+    flock.boids.size shouldBe 0
+  }
+
+  it should "eventually remove all boids if called repeatedly" in {
+    val flock = Flock(ArrayBuffer.fill(3)(Boid(Vector2D(0,0), Vector2D(1,1))))
+
+    flock.removeRandomBoid()
+    flock.removeRandomBoid()
+    flock.removeRandomBoid()
+
+    flock.boids shouldBe empty
+  }
+
 end FlockTest
 
 

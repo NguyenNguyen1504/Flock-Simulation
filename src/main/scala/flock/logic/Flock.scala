@@ -10,7 +10,7 @@ class Flock(val boids: ArrayBuffer[Boid]):
   def removeBoid(boid: Boid): Unit =
     this.boids -= boid
   def addRandomBoid(): Unit =
-    val side = scala.util.Random.nextInt(4) // 0: Top, 1: Right, 2: Bottom, 3: Left
+    val side = Random.nextInt(4) // 0: Top, 1: Right, 2: Bottom, 3: Left
     var x, y = 0.0
     var vx, vy = 0.0
 
@@ -34,6 +34,11 @@ class Flock(val boids: ArrayBuffer[Boid]):
     val randomVel = Vector2D(vx, vy).normalize() * Constants.maxSpeed
 
     this.addBoid(Boid(randomPos, randomVel))
+
+  def removeRandomBoid(): Unit =
+  if this.boids.nonEmpty then
+    val randomIndex = Random.nextInt(this.boids.size)
+    this.removeBoid(this.boids(randomIndex))
 
   def findNeighbors(target: Boid): ArrayBuffer[Boid] =
     val neighbors = ArrayBuffer[Boid]()
