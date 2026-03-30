@@ -57,5 +57,8 @@ class SpinnerSetting(val labelName: String, minValue: Int, maxValue: Int, initia
   children = Seq(titleLabel, spinner)
 
   def onChange(action: Int => Unit) = spinner.valueProperty().onChange((_, _, v) => action(v))
+  
+  def setValue(n: Int): Unit = 
+    spinner.valueFactory().value() = n
 
 end SpinnerSetting

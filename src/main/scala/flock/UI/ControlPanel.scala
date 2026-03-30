@@ -5,7 +5,7 @@ import scalafx.geometry.{Insets, Pos, VPos}
 import scalafx.scene.control.Button
 import scalafx.scene.layout.{ColumnConstraints, GridPane, Priority, RowConstraints, VBox}
 
-class ControlPanel extends GridPane:
+class ControlPanel(initialFlockSize: Int) extends GridPane:
 
   minWidth = 800
   minHeight = 400
@@ -13,12 +13,12 @@ class ControlPanel extends GridPane:
   vgap = 20
   padding = Insets(30)
 
-  val numberOfBirdsSetting    = SpinnerSetting("Number of birds", 10, 200, 50)
+  val flockSizeSetting    = SpinnerSetting("Flock size", Constants.minFlockSize, Constants.maxFlockSize, initialFlockSize)
   val separationWeightSetting = SliderSetting("Separation weight", 0.0, 15.0, Constants.separationWeight)
   val alignmentWeightSetting  = SliderSetting("Alignment weight", 0.0, 15.0, Constants.alignmentWeight)
   val cohesionWeightSetting   = SliderSetting("Cohesion weight", 0.0, 15.0, Constants.cohesionWeight)
 
-  numberOfBirdsSetting.maxWidth    = Double.MaxValue
+  flockSizeSetting.maxWidth        = Double.MaxValue
   separationWeightSetting.maxWidth = Double.MaxValue
   alignmentWeightSetting.maxWidth  = Double.MaxValue
   cohesionWeightSetting.maxWidth   = Double.MaxValue
@@ -48,7 +48,7 @@ class ControlPanel extends GridPane:
 
   columnConstraints = Seq(col0, col1)
 
-  add(numberOfBirdsSetting, 0, 0)
+  add(flockSizeSetting, 0, 0)
   add(separationWeightSetting, 0, 1)
   add(alignmentWeightSetting, 0, 2)
   add(cohesionWeightSetting, 0, 3)
@@ -56,4 +56,7 @@ class ControlPanel extends GridPane:
   GridPane.setValignment(actionButtons, VPos.Center)
   add(actionButtons, 1, 0, 1, 4)
 
+  def setFlockSize(n: Int): Unit =
+    flockSizeSetting.setValue(n)
+    
 end ControlPanel

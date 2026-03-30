@@ -5,13 +5,13 @@ import scalafx.geometry.Insets
 import scalafx.scene.Scene
 import scalafx.scene.layout.BorderPane
 
-object SimulationScene extends Scene:
+class SimulationScene(initialFlockSize: Int) extends Scene:
 
   val mainLayout = new BorderPane():
     padding = Insets(20, 20, 20, 20)
 
   val flockWindow  = new FlockWindow()
-  val controlPanel = new ControlPanel()
+  val controlPanel = new ControlPanel(initialFlockSize)
 
   mainLayout.center = flockWindow
   mainLayout.bottom = controlPanel
@@ -45,8 +45,8 @@ object SimulationScene extends Scene:
 
   // Setting callbacks
 
-  def onNumberOfBirdsChange(action: Int => Unit): Unit =
-    controlPanel.numberOfBirdsSetting.onChange(action)
+  def onFlockSizeChange(action: Int => Unit): Unit =
+    controlPanel.flockSizeSetting.onChange(action)
 
   def onSeparationWeightChange(action: Double => Unit): Unit =
     controlPanel.separationWeightSetting.onChange(action)
@@ -57,4 +57,5 @@ object SimulationScene extends Scene:
   def onCohesionWeightChange(action: Double => Unit): Unit =
     controlPanel.cohesionWeightSetting.onChange(action)
 
+  def updateFlockSize(n: Int): Unit = controlPanel.setFlockSize(n)
 end SimulationScene
