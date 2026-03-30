@@ -176,6 +176,24 @@ class FlockTest extends AnyFlatSpec with Matchers:
     noException should be thrownBy flock.update(1.0)
   }
 
+  "Flock.addRandomBoid" should "increase the flock size by 1" in {
+    val flock = Flock(ArrayBuffer())
+    val initialSize = flock.boids.size
+    flock.addRandomBoid()
+    flock.boids.size shouldBe initialSize + 1
+  }
+
+  it should "place the boid within or on the boundaries of the world" in {
+    Constants.worldWidth = 800.0
+    Constants.worldHeight = 600.0
+    val flock = Flock(ArrayBuffer())
+    flock.addRandomBoid()
+    val boid = flock.boids.head
+
+    boid.position.x should (be >= 0.0 and be <= Constants.worldWidth)
+    boid.position.y should (be >= 0.0 and be <= Constants.worldHeight)
+  }
+
 end FlockTest
 
 

@@ -1,5 +1,6 @@
 package flock.logic
 import scala.collection.mutable.ArrayBuffer
+import scala.util.Random
 
 class Flock(val boids: ArrayBuffer[Boid]):
 
@@ -8,6 +9,31 @@ class Flock(val boids: ArrayBuffer[Boid]):
 
   def removeBoid(boid: Boid): Unit =
     this.boids -= boid
+  def addRandomBoid(): Unit =
+    val side = scala.util.Random.nextInt(4) // 0: Top, 1: Right, 2: Bottom, 3: Left
+    var x, y = 0.0
+    var vx, vy = 0.0
+
+    side match
+      case 0 => // Top
+        x = Random.nextDouble() * Constants.worldWidth
+        y = 0; vy = 1.0
+      case 1 => // Right
+        x = Constants.worldWidth
+        y = Random.nextDouble() * Constants.worldHeight
+        vx = -1.0
+      case 2 => // Bottom
+        x = Random.nextDouble() * Constants.worldWidth
+        y = Constants.worldHeight; vy = -1.0
+      case 3 => // Left
+        x = 0
+        y = Random.nextDouble() * Constants.worldHeight
+        vx = 1.0
+
+    val randomPos = Vector2D(x, y)
+    val randomVel = Vector2D(vx, vy).normalize() * Constants.maxSpeed
+
+    this.addBoid(Boid(randomPos, randomVel))
 
   def findNeighbors(target: Boid): ArrayBuffer[Boid] =
     val neighbors = ArrayBuffer[Boid]()
