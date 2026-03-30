@@ -20,6 +20,7 @@ object Main extends JFXApp3:
         new Flock(ArrayBuffer.empty)
         
     val initialFlockSize = flock.boids.size
+    val mainScene = new SimulationScene(initialFlockSize)
 
     stage = new JFXApp3.PrimaryStage():
       title = "Flock Simulation"
@@ -28,50 +29,50 @@ object Main extends JFXApp3:
       minWidth = 800
       minHeight = 800
       resizable = true
-
-    SimulationScene.sync(flock)
-    stage.scene = SimulationScene
+      scene = mainScene
+    
+    mainScene.sync(flock)
 
     var lastTime = 0L
     val timer = AnimationTimer( now =>
       if lastTime != 0L then
         val dt = (now - lastTime) / 1000000000.0
         flock.update(dt)
-        SimulationScene.render(flock)
+        mainScene.render(flock)
       lastTime = now
     )
 
     // Wire UI → Logic
 
-    SimulationScene.onStart { timer.start() }
+    mainScene.onStart { timer.start() }
 
-    SimulationScene.onPause {
+    mainScene.onPause {
       timer.stop()
       lastTime = 0L
     }
 
-    SimulationScene.onReset {
+    mainScene.onReset {
       flock.resetWith(originalBoids)
-      SimulationScene.sync(flock)
-      SimulationScene.controlPanel.numberOfBirdsSetting.setValue(originalBoids.size)
+      mainScene.sync(flock)
+      mainScene.controlPanel.flockSizeSetting.setValue(originalBoids.size)
     }
 
-    SimulationScene.onQuit { stage.close() }
+    mainScene.onQuit { stage.close() }
 
-    SimulationScene.onSave {
+    mainScene.onSave {
       FlockFileIO.saveFlockToFile(flock, "data/save.json") match
         case Success(_) => println("Saved successfully")
         case Failure(e) => println(s"Save failed: ${e.getMessage}")
     }
 
-    SimulationScene.onNumberOfBirdsChange { n =>
+    mainScene.onNumberOfBirdsChange { n =>
       println("RESIZE: not implemented")
-      SimulationScene.sync(flock)
+      mainScene.sync(flock)
     }
 
-    SimulationScene.onSeparationWeightChange { w => Constants.separationWeight = w }
-    SimulationScene.onAlignmentWeightChange  { w => Constants.alignmentWeight  = w }
-    SimulationScene.onCohesionWeightChange   { w => Constants.cohesionWeight   = w }
+    mainScene.onSeparationWeightChange { w => Constants.separationWeight = w }
+    mainScene.onAlignmentWeightChange  { w => Constants.alignmentWeight  = w }
+    mainScene.onCohesionWeightChange   { w => Constants.cohesionWeight   = w }
 
     timer.start()
 
