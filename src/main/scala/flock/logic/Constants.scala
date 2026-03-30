@@ -13,6 +13,7 @@ object Constants:
   var mass = 1.0
   var worldWidth = 800.0
   var worldHeight = 400.0
+  val minFlockSize = 10
   val maxFlockSize = 200
 
 end Constants

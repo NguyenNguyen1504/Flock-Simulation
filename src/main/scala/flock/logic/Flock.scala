@@ -37,9 +37,9 @@ class Flock(val boids: ArrayBuffer[Boid]):
     this.addBoid(Boid(randomPos, randomVel))
 
   def removeRandomBoid(): Unit =
-  if this.boids.nonEmpty then
-    val randomIndex = Random.nextInt(this.boids.size)
-    this.removeBoid(this.boids(randomIndex))
+    if this.boids.nonEmpty then
+      val randomIndex = Random.nextInt(this.boids.size)
+      this.removeBoid(this.boids(randomIndex))
 
   def addRandomBoids(n: Int): Unit =
     val currentCount = this.boids.size
@@ -47,6 +47,12 @@ class Flock(val boids: ArrayBuffer[Boid]):
     val amountToAdd = if n > spaceLeft then spaceLeft else n
     for _ <- 1 to amountToAdd do
       addRandomBoid()
+
+  def removeRandomBoids(n: Int): Unit =
+    val removableAmount = this.boids.size - Constants.minFlockSize
+    val amountToRemove = if n > removableAmount then removableAmount else n
+    for _ <- 1 to amountToRemove do
+      removeRandomBoid()
 
 
   def findNeighbors(target: Boid): ArrayBuffer[Boid] =

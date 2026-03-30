@@ -236,6 +236,27 @@ class FlockTest extends AnyFlatSpec with Matchers:
     flock.boids.size shouldBe Constants.maxFlockSize
   }
 
+  "Flock.removeRandomBoids" should "decrease the flock size correctly" in {
+    val boids = ArrayBuffer.fill(15)(Boid(Vector2D(0,0), Vector2D(1,1)))
+    val flock = Flock(boids)
+    flock.removeRandomBoids(3)
+    flock.boids.size shouldBe 12
+  }
+
+  it should "not remove boids below Constants.minBoids" in {
+    val boids = ArrayBuffer.fill(15)(Boid(Vector2D(0,0), Vector2D(1,1)))
+    val flock = Flock(boids)
+    flock.removeRandomBoids(10)
+
+    flock.boids.size shouldBe Constants.minFlockSize
+  }
+
+  it should "not throw an error when trying to remove more boids than exist" in {
+    val flock = Flock(ArrayBuffer(Boid(Vector2D(0,0), Vector2D(1,1))))
+    noException should be thrownBy flock.removeRandomBoids(10)
+    flock.boids.size shouldBe 1
+  }
+
 end FlockTest
 
 
