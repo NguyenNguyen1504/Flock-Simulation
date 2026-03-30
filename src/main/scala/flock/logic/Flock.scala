@@ -54,6 +54,9 @@ class Flock(val boids: ArrayBuffer[Boid]):
     for _ <- 1 to amountToRemove do
       removeRandomBoid()
 
+  def resetWith(newBoids: Seq[Boid]): Unit =
+    this.boids.clear()
+    this.boids ++= newBoids.map(boid => Boid(boid.position, boid.velocity))
 
   def findNeighbors(target: Boid): ArrayBuffer[Boid] =
     val neighbors = ArrayBuffer[Boid]()
