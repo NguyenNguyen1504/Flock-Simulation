@@ -222,6 +222,20 @@ class FlockTest extends AnyFlatSpec with Matchers:
     flock.boids shouldBe empty
   }
 
+  "Flock.addRandomBoids" should "increase the flock size by n" in {
+    val flock = Flock(ArrayBuffer())
+    val n = 10
+    flock.addRandomBoids(n)
+    flock.boids.size shouldBe n
+  }
+  it should "not exceed Constants.maxFlockSize" in {
+    val flock = Flock(ArrayBuffer.fill(198)(Boid(Vector2D(0,0), Vector2D(1,1))))
+
+    flock.addRandomBoids(5)
+
+    flock.boids.size shouldBe Constants.maxFlockSize
+  }
+
 end FlockTest
 
 

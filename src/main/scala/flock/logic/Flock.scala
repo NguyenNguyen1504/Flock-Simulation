@@ -9,6 +9,7 @@ class Flock(val boids: ArrayBuffer[Boid]):
 
   def removeBoid(boid: Boid): Unit =
     this.boids -= boid
+
   def addRandomBoid(): Unit =
     val side = Random.nextInt(4) // 0: Top, 1: Right, 2: Bottom, 3: Left
     var x, y = 0.0
@@ -39,6 +40,14 @@ class Flock(val boids: ArrayBuffer[Boid]):
   if this.boids.nonEmpty then
     val randomIndex = Random.nextInt(this.boids.size)
     this.removeBoid(this.boids(randomIndex))
+
+  def addRandomBoids(n: Int): Unit =
+    val currentCount = this.boids.size
+    val spaceLeft = Constants.maxFlockSize - currentCount
+    val amountToAdd = if n > spaceLeft then spaceLeft else n
+    for _ <- 1 to amountToAdd do
+      addRandomBoid()
+
 
   def findNeighbors(target: Boid): ArrayBuffer[Boid] =
     val neighbors = ArrayBuffer[Boid]()
