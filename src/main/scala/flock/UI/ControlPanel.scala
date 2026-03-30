@@ -56,4 +56,7 @@ class ControlPanel(initialFlockSize: Int) extends GridPane:
   GridPane.setValignment(actionButtons, VPos.Center)
   add(actionButtons, 1, 0, 1, 4)
 
+  def setFlockSize(n: Int): Unit =
+    flockSizeSetting.setValue(n)
+    
 end ControlPanel

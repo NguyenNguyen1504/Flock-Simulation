@@ -45,7 +45,7 @@ class SimulationScene(initialFlockSize: Int) extends Scene:
 
   // Setting callbacks
 
-  def onNumberOfBirdsChange(action: Int => Unit): Unit =
+  def onFlockSizeChange(action: Int => Unit): Unit =
     controlPanel.flockSizeSetting.onChange(action)
 
   def onSeparationWeightChange(action: Double => Unit): Unit =
@@ -57,4 +57,5 @@ class SimulationScene(initialFlockSize: Int) extends Scene:
   def onCohesionWeightChange(action: Double => Unit): Unit =
     controlPanel.cohesionWeightSetting.onChange(action)
 
+  def updateFlockSize(n: Int): Unit = controlPanel.setFlockSize(n)
 end SimulationScene

@@ -65,7 +65,7 @@ object Main extends JFXApp3:
         case Failure(e) => println(s"Save failed: ${e.getMessage}")
     }
 
-    mainScene.onNumberOfBirdsChange { n =>
+    mainScene.onFlockSizeChange { n =>
       println("RESIZE: not implemented")
       mainScene.sync(flock)
     }
