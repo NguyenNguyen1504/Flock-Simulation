@@ -1,6 +1,6 @@
 package flock.UI
 
-import flock.logic.{Constants, Flock, FlockFileIO}
+import flock.logic.{Boid, Constants, Flock, FlockFileIO}
 import scalafx.animation.AnimationTimer
 import scalafx.application.JFXApp3
 
@@ -9,9 +9,12 @@ import scala.util.{Failure, Success}
 
 object Main extends JFXApp3:
 
+  var originalBoids: Seq[Boid] = Seq.empty
   def start() =
     val flock = FlockFileIO.loadFlockFromFile("data/testui.json") match
-      case Success(f) => f
+      case Success(f) =>
+        originalBoids = f.boids.map(b => Boid(b.position, b.velocity)).toSeq
+        f
       case Failure(e) =>
         println(s"Error in loading file: ${e.getMessage}")
         new Flock(ArrayBuffer.empty)
@@ -46,8 +49,9 @@ object Main extends JFXApp3:
     }
 
     SimulationScene.onReset {
-      println("RESET: not implemented")
+      flock.resetWith(originalBoids)
       SimulationScene.sync(flock)
+      SimulationScene.controlPanel.numberOfBirdsSetting.setValue(originalBoids.size)
     }
 
     SimulationScene.onQuit { stage.close() }
