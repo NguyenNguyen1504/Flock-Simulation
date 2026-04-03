@@ -22,12 +22,12 @@ case class Boid(private var _position: Vector2D, private var _velocity: Vector2D
   def applyForce(force: Vector2D): Unit =
     this.steeringForce += force
 
-  def update(deltaTime: Double): Unit =
+  def update(deltaTime: Double, constants: Constants): Unit =
     // Applying simple vehicle model
-    val limitedSteeringForce = this.steeringForce.truncate(Constants.maxSteeringForce)
-    val newAcceleration = limitedSteeringForce * (1.0/Constants.mass)
+    val limitedSteeringForce = this.steeringForce.truncate(constants.maxSteeringForce)
+    val newAcceleration = limitedSteeringForce * (1.0/constants.mass)
     this.acceleration = newAcceleration
-    this._velocity = (this._velocity + this.acceleration * deltaTime).truncate(Constants.maxSpeed)
+    this._velocity = (this._velocity + this.acceleration * deltaTime).truncate(constants.maxSpeed)
     this._position += (this._velocity * deltaTime)
     // Reset acceleration and steering force to their default values, ready for next loop
     this.acceleration = Vector2D(0,0)
@@ -35,8 +35,8 @@ case class Boid(private var _position: Vector2D, private var _velocity: Vector2D
     
     // Wrap-around
     this._position = Vector2D(
-      (this._position.x + Constants.worldWidth) % Constants.worldWidth,
-      (this._position.y + Constants.worldHeight) % Constants.worldHeight
+      (this._position.x + constants.worldWidth) % constants.worldWidth,
+      (this._position.y + constants.worldHeight) % constants.worldHeight
     )
 
 end Boid

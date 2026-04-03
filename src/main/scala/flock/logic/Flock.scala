@@ -118,6 +118,6 @@ class Flock(val boids: ArrayBuffer[Boid], val constants: Constants = Constants.d
       val steeringForce = s * constants.separationWeight + a * constants.alignmentWeight + c * constants.cohesionWeight
       boid.applyForce(steeringForce)
     for boid <- this.boids do
-      boid.update(deltaTime)
+      boid.update(deltaTime, this.constants)
 
 end Flock
