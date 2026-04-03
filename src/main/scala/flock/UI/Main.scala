@@ -19,6 +19,7 @@ object Main extends JFXApp3:
         println(s"Error in loading file: ${e.getMessage}")
         new Flock(ArrayBuffer.empty)
 
+    val constants = flock.constants
     val initialFlockSize = flock.boids.size
     val mainScene = new SimulationScene(initialFlockSize)
 
@@ -74,9 +75,9 @@ object Main extends JFXApp3:
       mainScene.sync(flock)
     }
 
-    mainScene.onSeparationWeightChange { w => Constants.separationWeight = w }
-    mainScene.onAlignmentWeightChange  { w => Constants.alignmentWeight  = w }
-    mainScene.onCohesionWeightChange   { w => Constants.cohesionWeight   = w }
+    mainScene.onSeparationWeightChange { weight => flock.updateConstants(Constants(separationWeight = weight)) }
+    mainScene.onAlignmentWeightChange  { weight => flock.updateConstants(Constants(alignmentWeight  = weight)) }
+    mainScene.onCohesionWeightChange   { weight => flock.updateConstants(Constants(cohesionWeight   = weight)) }
 
     timer.start()
 
