@@ -18,7 +18,7 @@ object Main extends JFXApp3:
       case Failure(e) =>
         println(s"Error in loading file: ${e.getMessage}")
         new Flock(ArrayBuffer.empty)
-        
+
     val initialFlockSize = flock.boids.size
     val mainScene = new SimulationScene(initialFlockSize)
 
