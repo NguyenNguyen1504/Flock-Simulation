@@ -2,7 +2,7 @@ package flock.logic
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
-class Flock(val boids: ArrayBuffer[Boid]):
+class Flock(val boids: ArrayBuffer[Boid], val constants: Constants = Constants.default):
 
   def addBoid(boid: Boid): Unit =
     this.boids += boid
@@ -17,22 +17,22 @@ class Flock(val boids: ArrayBuffer[Boid]):
 
     side match
       case 0 => // Top
-        x = Random.nextDouble() * Constants.worldWidth
+        x = Random.nextDouble() * constants.worldWidth
         y = 0; vy = 1.0
       case 1 => // Right
-        x = Constants.worldWidth
-        y = Random.nextDouble() * Constants.worldHeight
+        x = constants.worldWidth
+        y = Random.nextDouble() * constants.worldHeight
         vx = -1.0
       case 2 => // Bottom
-        x = Random.nextDouble() * Constants.worldWidth
-        y = Constants.worldHeight; vy = -1.0
+        x = Random.nextDouble() * constants.worldWidth
+        y = constants.worldHeight; vy = -1.0
       case 3 => // Left
         x = 0
-        y = Random.nextDouble() * Constants.worldHeight
+        y = Random.nextDouble() * constants.worldHeight
         vx = 1.0
 
     val randomPos = Vector2D(x, y)
-    val randomVel = Vector2D(vx, vy).normalize() * Constants.maxSpeed
+    val randomVel = Vector2D(vx, vy).normalize() * constants.maxSpeed
 
     this.addBoid(Boid(randomPos, randomVel))
 
@@ -43,13 +43,13 @@ class Flock(val boids: ArrayBuffer[Boid]):
 
   def addRandomBoids(n: Int): Unit =
     val currentCount = this.boids.size
-    val spaceLeft = Constants.maxFlockSize - currentCount
+    val spaceLeft = constants.maxFlockSize - currentCount
     val amountToAdd = if n > spaceLeft then spaceLeft else n
     for _ <- 1 to amountToAdd do
       addRandomBoid()
 
   def removeRandomBoids(n: Int): Unit =
-    val removableAmount = this.boids.size - Constants.minFlockSize
+    val removableAmount = this.boids.size - constants.minFlockSize
     val amountToRemove = if n > removableAmount then removableAmount else n
     for _ <- 1 to amountToRemove do
       removeRandomBoid()
@@ -60,8 +60,8 @@ class Flock(val boids: ArrayBuffer[Boid]):
 
   def findNeighbors(target: Boid): ArrayBuffer[Boid] =
     val neighbors = ArrayBuffer[Boid]()
-    val rSquared = Constants.perceptionRadius * Constants.perceptionRadius
-    val maxAngle = Constants.perceptionAngle / 2
+    val rSquared = constants.perceptionRadius * constants.perceptionRadius
+    val maxAngle = constants.perceptionAngle / 2
 
     for boid <- this.boids do
       if boid != target then
@@ -80,7 +80,7 @@ class Flock(val boids: ArrayBuffer[Boid]):
       toAnother * (1.0 / r)
 
     // Take all surrounding boids, not only the ones in the perception angle
-    val minDSquared = Constants.minSeparationDistance * Constants.minSeparationDistance
+    val minDSquared = constants.minSeparationDistance * constants.minSeparationDistance
     val closeNeighbors = boids.filter(b => b != target && b.distanceSquared(target) <= minDSquared)
 
     // Avoid UnsupportedOperationException
@@ -115,7 +115,7 @@ class Flock(val boids: ArrayBuffer[Boid]):
       val s = calculateSeparation(boid)  // Separation weight calculated based on neighborhood
       val a = calculateAlignment(boid)   // Alignment weight calculated based on neighborhood
       val c = calculateCohesion(boid)    // Cohesion weight calculated based on neighborhood
-      val steeringForce = s * Constants.separationWeight + a * Constants.alignmentWeight + c * Constants.cohesionWeight
+      val steeringForce = s * constants.separationWeight + a * constants.alignmentWeight + c * constants.cohesionWeight
       boid.applyForce(steeringForce)
     for boid <- this.boids do
       boid.update(deltaTime)
