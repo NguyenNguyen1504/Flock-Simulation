@@ -75,9 +75,9 @@ object Main extends JFXApp3:
       mainScene.sync(flock)
     }
 
-    mainScene.onSeparationWeightChange { weight => flock.updateConstants(Constants(separationWeight = weight)) }
-    mainScene.onAlignmentWeightChange  { weight => flock.updateConstants(Constants(alignmentWeight  = weight)) }
-    mainScene.onCohesionWeightChange   { weight => flock.updateConstants(Constants(cohesionWeight   = weight)) }
+    mainScene.onSeparationWeightChange { weight => flock.updateConstants(flock.constants.copy(separationWeight = weight)) }
+    mainScene.onAlignmentWeightChange  { weight => flock.updateConstants(flock.constants.copy(alignmentWeight  = weight)) }
+    mainScene.onCohesionWeightChange   { weight => flock.updateConstants(flock.constants.copy(cohesionWeight   = weight)) }
 
     timer.start()
 
