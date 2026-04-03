@@ -5,7 +5,7 @@ import scalafx.geometry.{Insets, Pos, VPos}
 import scalafx.scene.control.Button
 import scalafx.scene.layout.{ColumnConstraints, GridPane, Priority, RowConstraints, VBox}
 
-class ControlPanel(initialFlockSize: Int) extends GridPane:
+class ControlPanel(initialFlockSize: Int, constants: Constants) extends GridPane:
 
   minWidth = 800
   minHeight = 400
@@ -13,10 +13,10 @@ class ControlPanel(initialFlockSize: Int) extends GridPane:
   vgap = 20
   padding = Insets(30)
 
-  val flockSizeSetting    = SpinnerSetting("Flock size", Constants.minFlockSize, Constants.maxFlockSize, initialFlockSize)
-  val separationWeightSetting = SliderSetting("Separation weight", 0.0, 15.0, Constants.separationWeight)
-  val alignmentWeightSetting  = SliderSetting("Alignment weight", 0.0, 15.0, Constants.alignmentWeight)
-  val cohesionWeightSetting   = SliderSetting("Cohesion weight", 0.0, 15.0, Constants.cohesionWeight)
+  val flockSizeSetting    = SpinnerSetting("Flock size", constants.minFlockSize, constants.maxFlockSize, initialFlockSize)
+  val separationWeightSetting = SliderSetting("Separation weight", 0.0, 15.0, constants.separationWeight)
+  val alignmentWeightSetting  = SliderSetting("Alignment weight", 0.0, 15.0, constants.alignmentWeight)
+  val cohesionWeightSetting   = SliderSetting("Cohesion weight", 0.0, 15.0, constants.cohesionWeight)
 
   flockSizeSetting.maxWidth        = Double.MaxValue
   separationWeightSetting.maxWidth = Double.MaxValue

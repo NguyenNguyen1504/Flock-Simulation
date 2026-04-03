@@ -9,7 +9,7 @@ import scalafx.scene.paint.Color
 
 import scala.collection.mutable.ArrayBuffer
 
-class FlockWindow extends Pane:
+class FlockWindow(constants: Constants) extends Pane:
   // Frame
   minWidth = 800
   minHeight = 400
@@ -48,8 +48,8 @@ class FlockWindow extends Pane:
     }
 
   val clipRectangle = new Rectangle:
-    width = Constants.worldWidth
-    height = Constants.worldHeight
+    width = constants.worldWidth
+    height = constants.worldHeight
 
   this.clip = clipRectangle
 

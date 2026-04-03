@@ -21,7 +21,7 @@ object Main extends JFXApp3:
 
     val constants = flock.constants
     val initialFlockSize = flock.boids.size
-    val mainScene = new SimulationScene(initialFlockSize)
+    val mainScene = new SimulationScene(initialFlockSize, constants)
 
     stage = new JFXApp3.PrimaryStage():
       title = "Flock Simulation"
