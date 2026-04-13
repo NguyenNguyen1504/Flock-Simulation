@@ -1,4 +1,7 @@
 package flock.logic
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder}
+
 import scala.math.{acos, hypot}
 case class Vector2D(val x: Double, val y: Double):
 
@@ -23,7 +26,7 @@ case class Vector2D(val x: Double, val y: Double):
   def truncate(maxLength: Double): Vector2D =
     val m = this.magnitude()
     if m > maxLength then
-      val coefficient = maxLength / this.magnitude()
+      val coefficient = maxLength / m
       this * coefficient
     else
       this
@@ -44,3 +47,6 @@ case class Vector2D(val x: Double, val y: Double):
 
 end Vector2D
 
+object Vector2D:
+  given Decoder[Vector2D] = deriveDecoder[Vector2D]
+  given Encoder[Vector2D] = deriveEncoder[Vector2D]

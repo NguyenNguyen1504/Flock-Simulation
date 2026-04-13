@@ -1,21 +1,22 @@
 package flock.logic
 
+case class Constants(
+  perceptionRadius: Double = 100.0,
+  perceptionAngle: Double = 120.toRadians,
+  minSeparationDistance: Double = 25.0,
+  maxSpeed: Double = 80.0,
+  maxSteeringForce: Double = 4.0,
+  separationWeight: Double = 5.0,
+  alignmentWeight: Double = 2.0,
+  cohesionWeight: Double = 0.8,
+  mass: Double = 1.0,
+  worldWidth: Double = 800.0,
+  worldHeight: Double = 400.0,
+  minFlockSize: Int = 10,
+  maxFlockSize: Int = 200
+)
+
 object Constants:
-
-  var perceptionRadius = 100.0
-  var perceptionAngle = 120.toRadians
-  var minSeparationDistance = 25.0
-  var maxSpeed = 80.0
-  var maxSteeringForce = 4.0
-  var separationWeight = 5.0
-  var alignmentWeight = 2.0
-  var cohesionWeight = 0.8
-  var mass = 1.0
-  var worldWidth = 800.0
-  var worldHeight = 400.0
-  val minFlockSize = 10
-  val maxFlockSize = 200
-
-end Constants
+  val default = Constants()
 
 

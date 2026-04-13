@@ -1,17 +1,17 @@
 package flock.UI
 
-import flock.logic.Flock
+import flock.logic.{Constants, Flock}
 import scalafx.geometry.Insets
 import scalafx.scene.Scene
 import scalafx.scene.layout.BorderPane
 
-class SimulationScene(initialFlockSize: Int) extends Scene:
+class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene:
 
   val mainLayout = new BorderPane():
     padding = Insets(20, 20, 20, 20)
 
-  val flockWindow  = new FlockWindow()
-  val controlPanel = new ControlPanel(initialFlockSize)
+  val flockWindow  = new FlockWindow(constants)
+  val controlPanel = new ControlPanel(initialFlockSize, constants)
 
   mainLayout.center = flockWindow
   mainLayout.bottom = controlPanel

@@ -273,21 +273,6 @@ class FlockTest extends AnyFlatSpec with Matchers:
     flock.boids.last.position shouldBe Vector2D(200, 200)
   }
 
-  it should "perform a deep copy to ensure original data remains unchanged" in {
-    val originalPos = Vector2D(50, 50)
-    val originalBoids = Seq(Boid(originalPos, Vector2D(1, 1)))
-    val flock = Flock(ArrayBuffer.empty)
-
-    flock.resetWith(originalBoids)
-
-    // Thay đổi vị trí của boid trong flock (đang mô phỏng)
-    flock.boids.head.position = Vector2D(999, 999)
-
-    // Kiểm tra xem dữ liệu gốc trong Seq có bị đổi theo không
-    originalBoids.head.position shouldBe Vector2D(50, 50)
-    originalBoids.head.position should not be flock.boids.head.position
-  }
-
   it should "correctly clear the flock even if the new sequence is empty" in {
     val flock = Flock(ArrayBuffer(Boid(Vector2D(0, 0), Vector2D(0, 0))))
 

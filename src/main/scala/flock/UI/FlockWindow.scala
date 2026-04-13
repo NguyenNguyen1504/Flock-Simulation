@@ -9,7 +9,7 @@ import scalafx.scene.paint.Color
 
 import scala.collection.mutable.ArrayBuffer
 
-class FlockWindow extends Pane:
+class FlockWindow(constants: Constants) extends Pane:
   // Frame
   minWidth = 800
   minHeight = 400
@@ -27,7 +27,7 @@ class FlockWindow extends Pane:
       points ++= Seq(-6.0, -5.0, 6.0, 0.0, -6.0, 5.0)
       fill = Color.Black
 
-  def sync(boids: ArrayBuffer[Boid]): Unit =
+  def sync(boids: Seq[Boid]): Unit =
     val diff = boids.size - boidShapes.size
     if diff > 0 then
       val newShapes = ArrayBuffer.fill(diff){createBoidShapes()}
@@ -40,7 +40,7 @@ class FlockWindow extends Pane:
           val lastShape = boidShapes.remove(boidShapes.size - 1)
           boidGroup.children.remove(lastShape.delegate)
 
-  def render(boids: ArrayBuffer[Boid]): Unit =
+  def render(boids: Seq[Boid]): Unit =
     boids.zip(boidShapes).foreach { (boid, shape) =>
       shape.translateX = boid.position.x
       shape.translateY = boid.position.y
@@ -48,8 +48,8 @@ class FlockWindow extends Pane:
     }
 
   val clipRectangle = new Rectangle:
-    width = Constants.worldWidth
-    height = Constants.worldHeight
+    width = constants.worldWidth
+    height = constants.worldHeight
 
   this.clip = clipRectangle
 
