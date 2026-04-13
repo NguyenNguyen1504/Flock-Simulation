@@ -22,7 +22,7 @@ class FlockWindow(constants: Constants) extends Pane:
   private val boidGroup = new Group()
   this.children.add(boidGroup)
 
-  def createBoidShapes(): Polygon =
+  private def createBoidShapes(): Polygon =
     new Polygon:
       points ++= Seq(-6.0, -5.0, 6.0, 0.0, -6.0, 5.0)
       fill = Color.Black

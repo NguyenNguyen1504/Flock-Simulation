@@ -7,7 +7,7 @@ import scalafx.scene.layout.BorderPane
 
 class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene:
 
-  val mainLayout = new BorderPane():
+  private val mainLayout = new BorderPane():
     padding = Insets(20, 20, 20, 20)
 
   private val flockWindow  = new FlockWindow(constants)

@@ -19,7 +19,7 @@ case class Vector2D(val x: Double, val y: Double):
   def normalize(): Vector2D =
     val m = this.magnitude()
     if m > 0 then
-      this * (1 / this.magnitude())
+      this * (1 / m)
     else
       this
 
