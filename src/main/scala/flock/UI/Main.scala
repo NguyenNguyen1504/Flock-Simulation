@@ -1,6 +1,6 @@
 package flock.UI
 
-import flock.logic.{Boid, Flock, FlockFileIO}
+import flock.logic.{Flock, FlockFileIO}
 import scalafx.animation.AnimationTimer
 import scalafx.application.JFXApp3
 
@@ -16,7 +16,7 @@ object Main extends JFXApp3:
         println(s"Error in loading file: ${e.getMessage}")
         new Flock(ArrayBuffer.empty)
 
-    val originalBoids = flock.boids.map(b => Boid(b.position, b.velocity))
+    val originalBoids = flock.snapshot()
 
     val constants = flock.constants
     val initialFlockSize = flock.boids.size

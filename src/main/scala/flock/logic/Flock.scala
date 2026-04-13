@@ -93,7 +93,7 @@ class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Const
     require(newConstants.maxSpeed > 0, "maxSpeed must be positive")
     require(newConstants.minFlockSize < newConstants.maxFlockSize)
     this._constants = newConstants
-          
+
   def updateSeparationWeight(w: Double): Unit = this.updateConstants(this._constants.copy(separationWeight = w))
   def updateAlignmentWeight(w: Double): Unit  = this.updateConstants(this._constants.copy(alignmentWeight  = w))
   def updateCohesionWeight(w: Double): Unit   = this.updateConstants(this._constants.copy(cohesionWeight   = w))
@@ -104,5 +104,7 @@ class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Const
         this.addRandomBoids(newSize - currentSize)
       else if newSize < currentSize then
         this.removeRandomBoids(currentSize - newSize)
+
+  def snapshot(): Seq[Boid] = this._boids.map(b => Boid(b.position, b.velocity)).toSeq
 
 end Flock
