@@ -129,4 +129,10 @@ class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Const
     require(newConstants.minFlockSize < newConstants.maxFlockSize)
     this._constants = newConstants
 
+  def setSize(newSize: Int): Unit =
+    val currentSize = this.boids.size
+      if newSize > currentSize then
+        this.addRandomBoids(newSize - currentSize)
+      else if newSize < currentSize then
+        this.removeRandomBoids(currentSize - newSize)
 end Flock

@@ -67,11 +67,7 @@ object Main extends JFXApp3:
     }
 
     mainScene.onFlockSizeChange { n =>
-      val currentCount = flock.boids.size
-      if n > currentCount then
-        flock.addRandomBoids(n - currentCount)
-      else if n < currentCount then
-        flock.removeRandomBoids(currentCount - n)
+      flock.setSize(n)
       mainScene.sync(flock)
     }
 
