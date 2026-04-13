@@ -26,7 +26,7 @@ case class Vector2D(val x: Double, val y: Double):
   def truncate(maxLength: Double): Vector2D =
     val m = this.magnitude()
     if m > maxLength then
-      val coefficient = maxLength / this.magnitude()
+      val coefficient = maxLength / m
       this * coefficient
     else
       this
