@@ -71,9 +71,10 @@ class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Const
 
 
   def update(deltaTime: Double): Unit =
+    val allBoids = this._boids.toSeq
     for boid <- this._boids do
       val neighbors = findNeighbors(boid)
-      val s = Separation.calculate(boid, this._boids.toSeq, this._constants)
+      val s = Separation.calculate(boid, allBoids, this._constants)
       val a = Alignment.calculate(boid, neighbors, this._constants)
       val c = Cohesion.calculate(boid, neighbors, this._constants)
 

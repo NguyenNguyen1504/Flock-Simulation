@@ -1,11 +1,6 @@
 package flock.logic
 
-trait SteeringBehavior:
-  def calculate(target: Boid, neighbors: Seq[Boid], constants: Constants): Vector2D
-end SteeringBehavior
-
-
-object Separation extends SteeringBehavior:
+object Separation:
   def calculate(target: Boid, allBoids: Seq[Boid], constants: Constants): Vector2D =
     // Take all surrounding boids, not only the ones in the perception angle
     val minDSquared = constants.minSeparationDistance * constants.minSeparationDistance
@@ -22,7 +17,7 @@ object Separation extends SteeringBehavior:
 end Separation
 
 
-object Alignment extends SteeringBehavior:
+object Alignment:
   def calculate(target: Boid, neighbors: Seq[Boid], constants: Constants): Vector2D =
     if neighbors.isEmpty then Vector2D(0,0)
     else
@@ -31,7 +26,7 @@ object Alignment extends SteeringBehavior:
 end Alignment
 
 
-object Cohesion extends SteeringBehavior:
+object Cohesion:
   def calculate(target: Boid, neighbors: Seq[Boid], constants: Constants): Vector2D =
     if neighbors.isEmpty then Vector2D(0,0)
     else
