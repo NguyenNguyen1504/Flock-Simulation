@@ -55,7 +55,7 @@ object Main extends JFXApp3:
     mainScene.onReset {
       flock.resetWith(originalBoids)
       mainScene.sync(flock)
-      mainScene.controlPanel.flockSizeSetting.setValue(originalBoids.size)
+      mainScene.updateFlockSize(originalBoids.size)
     }
 
     mainScene.onQuit { stage.close() }
