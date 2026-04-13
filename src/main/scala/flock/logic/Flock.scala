@@ -19,22 +19,22 @@ class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Const
 
     side match
       case 0 => // Top
-        x = Random.nextDouble() * _constants.worldWidth
+        x = Random.nextDouble() * this._constants.worldWidth
         y = 0; vy = 1.0
       case 1 => // Right
-        x = _constants.worldWidth
-        y = Random.nextDouble() * _constants.worldHeight
+        x = this._constants.worldWidth
+        y = Random.nextDouble() * this._constants.worldHeight
         vx = -1.0
       case 2 => // Bottom
-        x = Random.nextDouble() * _constants.worldWidth
-        y = _constants.worldHeight; vy = -1.0
+        x = Random.nextDouble() * this._constants.worldWidth
+        y = this._constants.worldHeight; vy = -1.0
       case 3 => // Left
         x = 0
-        y = Random.nextDouble() * _constants.worldHeight
+        y = Random.nextDouble() * this._constants.worldHeight
         vx = 1.0
 
     val randomPos = Vector2D(x, y)
-    val randomVel = Vector2D(vx, vy).normalize() * _constants.maxSpeed
+    val randomVel = Vector2D(vx, vy).normalize() * this._constants.maxSpeed
 
     this.addBoid(Boid(randomPos, randomVel))
 
@@ -45,13 +45,13 @@ class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Const
 
   def addRandomBoids(n: Int): Unit =
     val currentCount = this._boids.size
-    val spaceLeft = _constants.maxFlockSize - currentCount
+    val spaceLeft = this._constants.maxFlockSize - currentCount
     val amountToAdd = if n > spaceLeft then spaceLeft else n
     for _ <- 1 to amountToAdd do
       addRandomBoid()
 
   def removeRandomBoids(n: Int): Unit =
-    val removableAmount = this._boids.size - _constants.minFlockSize
+    val removableAmount = this._boids.size - this._constants.minFlockSize
     val amountToRemove = if n > removableAmount then removableAmount else n
     for _ <- 1 to amountToRemove do
       removeRandomBoid()
@@ -60,65 +60,29 @@ class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Const
     this._boids.clear()
     this._boids ++= newBoids.map(boid => Boid(boid.position, boid.velocity))
 
-  def findNeighbors(target: Boid): ArrayBuffer[Boid] =
-    val neighbors = ArrayBuffer[Boid]()
-    val rSquared = _constants.perceptionRadius * _constants.perceptionRadius
-    val maxAngle = _constants.perceptionAngle / 2
-
-    for boid <- this._boids do
-      if boid != target then
-        val dSquared = boid.distanceSquared(target)
-        val angle = target.angle(boid)
-        if dSquared <= rSquared && angle <= maxAngle then
-          neighbors += boid
-
-    neighbors
-
-
-  def calculateSeparation(target: Boid): Vector2D =
-    def takeSeparateVector(another: Boid): Vector2D =     // Calculates a repulsion vector inversely proportional to the squared distance
-      val toAnother = target.position - another.position
-      val r = toAnother.magnitudeSquared()
-      toAnother * (1.0 / r)
-
-    // Take all surrounding boids, not only the ones in the perception angle
-    val minDSquared = _constants.minSeparationDistance * _constants.minSeparationDistance
-    val closeNeighbors = this._boids.filter(b => b != target && b.distanceSquared(target) <= minDSquared)
-
-    // Avoid UnsupportedOperationException
-    if closeNeighbors.isEmpty then
-      Vector2D(0,0)
-    else
-      closeNeighbors.map(takeSeparateVector(_)).reduce(_+_)
-
-
-  def calculateAlignment(target: Boid): Vector2D =
-    val neighbors = findNeighbors(target)
-    val numberOfNeighbors = neighbors.size
-    if numberOfNeighbors == 0 then
-      Vector2D(0,0)
-    else
-      val avgVelocity = (neighbors.map(_.velocity).reduce(_+_)) * (1.0/numberOfNeighbors)
-      avgVelocity - target.velocity
-
-
-  def calculateCohesion(target: Boid): Vector2D =
-    val neighbors = findNeighbors(target)
-    val numberOfNeighbors = neighbors.size
-    if numberOfNeighbors == 0 then
-      Vector2D(0,0)
-    else
-      val centerOfMass = (neighbors.map(_.position).reduce(_+_)) * (1.0/numberOfNeighbors)
-      centerOfMass - target.position
+  def findNeighbors(target: Boid): Seq[Boid] =
+    val rSquared = this._constants.perceptionRadius * this._constants.perceptionRadius
+    val maxAngle = this._constants.perceptionAngle / 2
+    this._boids.filter(boid =>
+      boid != target &&
+      boid.distanceSquared(target) <= rSquared &&
+      target.angle(boid) <= maxAngle
+    ).toSeq
 
 
   def update(deltaTime: Double): Unit =
     for boid <- this._boids do
-      val s = calculateSeparation(boid)  // Separation weight calculated based on neighborhood
-      val a = calculateAlignment(boid)   // Alignment weight calculated based on neighborhood
-      val c = calculateCohesion(boid)    // Cohesion weight calculated based on neighborhood
-      val steeringForce = s * _constants.separationWeight + a * _constants.alignmentWeight + c * _constants.cohesionWeight
+      val neighbors = findNeighbors(boid)
+      val s = Separation.calculate(boid, this._boids.toSeq, this._constants)
+      val a = Alignment.calculate(boid, neighbors, this._constants)
+      val c = Cohesion.calculate(boid, neighbors, this._constants)
+
+      val steeringForce = s * this._constants.separationWeight +
+                          a * this._constants.alignmentWeight +
+                          c * this._constants.cohesionWeight
+
       boid.applyForce(steeringForce)
+
     for boid <- this._boids do
       boid.update(deltaTime, this._constants)
 
