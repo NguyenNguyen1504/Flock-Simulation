@@ -9,15 +9,14 @@ import scala.util.{Failure, Success}
 
 object Main extends JFXApp3:
 
-  var originalBoids: Seq[Boid] = Seq.empty
   def start() =
     val flock = FlockFileIO.loadFlockFromFile("data/testui.json") match
-      case Success(f) =>
-        originalBoids = f.boids.map(b => Boid(b.position, b.velocity)).toSeq
-        f
+      case Success(f) => f
       case Failure(e) =>
         println(s"Error in loading file: ${e.getMessage}")
         new Flock(ArrayBuffer.empty)
+
+    val originalBoids = flock.boids.map(b => Boid(b.position, b.velocity))
 
     val constants = flock.constants
     val initialFlockSize = flock.boids.size
