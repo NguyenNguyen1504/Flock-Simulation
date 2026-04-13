@@ -1,6 +1,6 @@
 package flock.UI
 
-import flock.logic.{Boid, Constants, Flock, FlockFileIO}
+import flock.logic.{Boid, Flock, FlockFileIO}
 import scalafx.animation.AnimationTimer
 import scalafx.application.JFXApp3
 
@@ -70,9 +70,9 @@ object Main extends JFXApp3:
       mainScene.sync(flock)
     }
 
-    mainScene.onSeparationWeightChange { weight => flock.updateConstants(flock.constants.copy(separationWeight = weight)) }
-    mainScene.onAlignmentWeightChange  { weight => flock.updateConstants(flock.constants.copy(alignmentWeight  = weight)) }
-    mainScene.onCohesionWeightChange   { weight => flock.updateConstants(flock.constants.copy(cohesionWeight   = weight)) }
+    mainScene.onSeparationWeightChange { flock.updateSeparationWeight(_) }
+    mainScene.onAlignmentWeightChange  { flock.updateAlignmentWeight(_) }
+    mainScene.onCohesionWeightChange   { flock.updateCohesionWeight(_) }
 
     timer.start()
 

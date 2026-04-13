@@ -10,8 +10,8 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
   val mainLayout = new BorderPane():
     padding = Insets(20, 20, 20, 20)
 
-  val flockWindow  = new FlockWindow(constants)
-  val controlPanel = new ControlPanel(initialFlockSize, constants)
+  private val flockWindow  = new FlockWindow(constants)
+  private val controlPanel = new ControlPanel(initialFlockSize, constants)
 
   mainLayout.center = flockWindow
   mainLayout.bottom = controlPanel
