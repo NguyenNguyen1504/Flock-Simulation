@@ -13,21 +13,21 @@ class ControlPanel(initialFlockSize: Int, constants: Constants) extends GridPane
   vgap = 20
   padding = Insets(30)
 
-  val flockSizeSetting    = SpinnerSetting("Flock size", constants.minFlockSize, constants.maxFlockSize, initialFlockSize)
-  val separationWeightSetting = SliderSetting("Separation weight", 0.0, 15.0, constants.separationWeight)
-  val alignmentWeightSetting  = SliderSetting("Alignment weight", 0.0, 15.0, constants.alignmentWeight)
-  val cohesionWeightSetting   = SliderSetting("Cohesion weight", 0.0, 15.0, constants.cohesionWeight)
+  private val flockSizeSetting        = SpinnerSetting("Flock size", constants.minFlockSize, constants.maxFlockSize, initialFlockSize)
+  private val separationWeightSetting = SliderSetting("Separation weight", 0.0, 15.0, constants.separationWeight)
+  private val alignmentWeightSetting  = SliderSetting("Alignment weight", 0.0, 15.0, constants.alignmentWeight)
+  private val cohesionWeightSetting   = SliderSetting("Cohesion weight", 0.0, 15.0, constants.cohesionWeight)
 
   flockSizeSetting.maxWidth        = Double.MaxValue
   separationWeightSetting.maxWidth = Double.MaxValue
   alignmentWeightSetting.maxWidth  = Double.MaxValue
   cohesionWeightSetting.maxWidth   = Double.MaxValue
 
-  val startButton = new Button("START") { prefWidth = 100 }
-  val pauseButton = new Button("PAUSE") { prefWidth = 100 }
-  val resetButton = new Button("RESET") { prefWidth = 100 }
-  val quitButton  = new Button("QUIT")  { prefWidth = 100; style = "-fx-base: #ff4444;" }
-  val saveButton  = new Button("SAVE")  { prefWidth = 100 }
+  private val startButton = new Button("START") { prefWidth = 100 }
+  private val pauseButton = new Button("PAUSE") { prefWidth = 100 }
+  private val resetButton = new Button("RESET") { prefWidth = 100 }
+  private val quitButton  = new Button("QUIT")  { prefWidth = 100; style = "-fx-base: #ff4444;" }
+  private val saveButton  = new Button("SAVE")  { prefWidth = 100 }
 
   val actionButtons = new VBox:
     spacing = 15
@@ -56,7 +56,17 @@ class ControlPanel(initialFlockSize: Int, constants: Constants) extends GridPane
   GridPane.setValignment(actionButtons, VPos.Center)
   add(actionButtons, 1, 0, 1, 4)
 
-  def setFlockSize(n: Int): Unit =
-    flockSizeSetting.setValue(n)
+  def onStart(action: => Unit): Unit  = startButton.onAction = _ => action
+  def onPause(action: => Unit): Unit  = pauseButton.onAction = _ => action
+  def onReset(action: => Unit): Unit  = resetButton.onAction = _ => action
+  def onQuit(action: => Unit): Unit   = quitButton.onAction  = _ => action
+  def onSave(action: => Unit): Unit   = saveButton.onAction  = _ => action
+
+  def onFlockSizeChange(action: Int => Unit): Unit           = flockSizeSetting.onChange(action)
+  def onSeparationWeightChange(action: Double => Unit): Unit = separationWeightSetting.onChange(action)
+  def onAlignmentWeightChange(action: Double => Unit): Unit  = alignmentWeightSetting.onChange(action)
+  def onCohesionWeightChange(action: Double => Unit): Unit   = cohesionWeightSetting.onChange(action)
+
+  def setFlockSize(n: Int): Unit = flockSizeSetting.setValue(n)
     
 end ControlPanel

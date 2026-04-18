@@ -26,36 +26,17 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
   def render(flock: Flock): Unit =
     flockWindow.render(flock.boids)
 
-  // Button callbacks
+  def onStart(action: => Unit): Unit = controlPanel.onStart(action)
+  def onPause(action: => Unit): Unit = controlPanel.onPause(action)
+  def onReset(action: => Unit): Unit = controlPanel.onReset(action)
+  def onQuit(action: => Unit): Unit  = controlPanel.onQuit(action)
+  def onSave(action: => Unit): Unit  = controlPanel.onSave(action)
 
-  def onStart(action: => Unit): Unit =
-    controlPanel.startButton.onAction = _ => action
-
-  def onPause(action: => Unit): Unit =
-    controlPanel.pauseButton.onAction = _ => action
-
-  def onReset(action: => Unit): Unit =
-    controlPanel.resetButton.onAction = _ => action
-
-  def onQuit(action: => Unit): Unit =
-    controlPanel.quitButton.onAction = _ => action
-
-  def onSave(action: => Unit): Unit =
-    controlPanel.saveButton.onAction = _ => action
-
-  // Setting callbacks
-
-  def onFlockSizeChange(action: Int => Unit): Unit =
-    controlPanel.flockSizeSetting.onChange(action)
-
-  def onSeparationWeightChange(action: Double => Unit): Unit =
-    controlPanel.separationWeightSetting.onChange(action)
-
-  def onAlignmentWeightChange(action: Double => Unit): Unit =
-    controlPanel.alignmentWeightSetting.onChange(action)
-
-  def onCohesionWeightChange(action: Double => Unit): Unit =
-    controlPanel.cohesionWeightSetting.onChange(action)
+  def onFlockSizeChange(action: Int => Unit): Unit           = controlPanel.onFlockSizeChange(action)
+  def onSeparationWeightChange(action: Double => Unit): Unit = controlPanel.onSeparationWeightChange(action)
+  def onAlignmentWeightChange(action: Double=> Unit): Unit   = controlPanel.onAlignmentWeightChange(action)
+  def onCohesionWeightChange(action: Double => Unit): Unit   = controlPanel.onCohesionWeightChange(action)
 
   def updateFlockSize(n: Int): Unit = controlPanel.setFlockSize(n)
+
 end SimulationScene
