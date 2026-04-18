@@ -1,6 +1,6 @@
 package flock.UI
 
-import flock.logic.{Boid, Constants, Flock, FlockFileIO}
+import flock.logic.{Flock, FlockFileIO}
 import scalafx.animation.AnimationTimer
 import scalafx.application.JFXApp3
 
@@ -9,15 +9,14 @@ import scala.util.{Failure, Success}
 
 object Main extends JFXApp3:
 
-  var originalBoids: Seq[Boid] = Seq.empty
   def start() =
     val flock = FlockFileIO.loadFlockFromFile("data/testui.json") match
-      case Success(f) =>
-        originalBoids = f.boids.map(b => Boid(b.position, b.velocity)).toSeq
-        f
+      case Success(f) => f
       case Failure(e) =>
         println(s"Error in loading file: ${e.getMessage}")
         new Flock(ArrayBuffer.empty)
+
+    val originalBoids = flock.snapshot()
 
     val constants = flock.constants
     val initialFlockSize = flock.boids.size
@@ -55,7 +54,7 @@ object Main extends JFXApp3:
     mainScene.onReset {
       flock.resetWith(originalBoids)
       mainScene.sync(flock)
-      mainScene.controlPanel.flockSizeSetting.setValue(originalBoids.size)
+      mainScene.updateFlockSize(originalBoids.size)
     }
 
     mainScene.onQuit { stage.close() }
@@ -71,9 +70,9 @@ object Main extends JFXApp3:
       mainScene.sync(flock)
     }
 
-    mainScene.onSeparationWeightChange { weight => flock.updateConstants(flock.constants.copy(separationWeight = weight)) }
-    mainScene.onAlignmentWeightChange  { weight => flock.updateConstants(flock.constants.copy(alignmentWeight  = weight)) }
-    mainScene.onCohesionWeightChange   { weight => flock.updateConstants(flock.constants.copy(cohesionWeight   = weight)) }
+    mainScene.onSeparationWeightChange { flock.updateSeparationWeight(_) }
+    mainScene.onAlignmentWeightChange  { flock.updateAlignmentWeight(_) }
+    mainScene.onCohesionWeightChange   { flock.updateCohesionWeight(_) }
 
     timer.start()
 

@@ -94,10 +94,17 @@ class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Const
     require(newConstants.minFlockSize < newConstants.maxFlockSize)
     this._constants = newConstants
 
+  def updateSeparationWeight(w: Double): Unit = this.updateConstants(this._constants.copy(separationWeight = w))
+  def updateAlignmentWeight(w: Double): Unit  = this.updateConstants(this._constants.copy(alignmentWeight  = w))
+  def updateCohesionWeight(w: Double): Unit   = this.updateConstants(this._constants.copy(cohesionWeight   = w))
+
   def setSize(newSize: Int): Unit =
     val currentSize = this.boids.size
       if newSize > currentSize then
         this.addRandomBoids(newSize - currentSize)
       else if newSize < currentSize then
         this.removeRandomBoids(currentSize - newSize)
+
+  def snapshot(): Seq[Boid] = this._boids.map(b => Boid(b.position, b.velocity)).toSeq
+
 end Flock

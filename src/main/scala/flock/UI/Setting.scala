@@ -23,12 +23,12 @@ end Setting
 
 class SliderSetting(val labelName: String, minValue: Double, maxValue: Double, initial: Double) extends Setting:
 
-  val slider = new Slider(minValue, maxValue, initial)
+  private val slider = new Slider(minValue, maxValue, initial)
 
   HBox.setHgrow(slider, Priority.Always) // Force slider to span
   slider.maxWidth = Double.MaxValue
 
-  val valueLabel = new Label(f"$initial%.1f"):
+  private val valueLabel = new Label(f"$initial%.1f"):
     minWidth = 45
     alignment = Pos.CenterLeft
   slider.value.onChange((_, _, v) =>
@@ -44,7 +44,7 @@ end SliderSetting
 
 class SpinnerSetting(val labelName: String, minValue: Int, maxValue: Int, initial: Int) extends Setting:
 
-  val spinner = new Spinner[Int](minValue, maxValue, initial):
+  private val spinner = new Spinner[Int](minValue, maxValue, initial):
     editable = true
   // Update when focus lost
   spinner.focusedProperty().onChange((_, _, isFocused) => {

@@ -22,7 +22,7 @@ class FlockWindow(constants: Constants) extends Pane:
   private val boidGroup = new Group()
   this.children.add(boidGroup)
 
-  def createBoidShapes(): Polygon =
+  private def createBoidShapes(): Polygon =
     new Polygon:
       points ++= Seq(-6.0, -5.0, 6.0, 0.0, -6.0, 5.0)
       fill = Color.Black
@@ -41,13 +41,17 @@ class FlockWindow(constants: Constants) extends Pane:
           boidGroup.children.remove(lastShape.delegate)
 
   def render(boids: Seq[Boid]): Unit =
+    require(
+    boids.size == boidShapes.size,
+    s"render() called with ${boids.size} boids but ${boidShapes.size} shapes. Call sync() first"
+    )
     boids.zip(boidShapes).foreach { (boid, shape) =>
       shape.translateX = boid.position.x
       shape.translateY = boid.position.y
       shape.rotate = math.toDegrees(math.atan2(boid.velocity.y, boid.velocity.x))
     }
 
-  val clipRectangle = new Rectangle:
+  private val clipRectangle = new Rectangle:
     width = constants.worldWidth
     height = constants.worldHeight
 
