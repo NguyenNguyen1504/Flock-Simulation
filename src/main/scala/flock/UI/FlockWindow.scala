@@ -41,6 +41,10 @@ class FlockWindow(constants: Constants) extends Pane:
           boidGroup.children.remove(lastShape.delegate)
 
   def render(boids: Seq[Boid]): Unit =
+    require(
+    boids.size == boidShapes.size,
+    s"render() called with ${boids.size} boids but ${boidShapes.size} shapes. Call sync() first"
+    )
     boids.zip(boidShapes).foreach { (boid, shape) =>
       shape.translateX = boid.position.x
       shape.translateY = boid.position.y
