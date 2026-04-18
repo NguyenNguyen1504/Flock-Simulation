@@ -51,7 +51,7 @@ class FlockWindow(constants: Constants) extends Pane:
       shape.rotate = math.toDegrees(math.atan2(boid.velocity.y, boid.velocity.x))
     }
 
-  val clipRectangle = new Rectangle:
+  private val clipRectangle = new Rectangle:
     width = constants.worldWidth
     height = constants.worldHeight
 

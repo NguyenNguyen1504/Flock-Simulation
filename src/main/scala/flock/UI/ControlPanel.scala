@@ -29,20 +29,20 @@ class ControlPanel(initialFlockSize: Int, constants: Constants) extends GridPane
   private val quitButton  = new Button("QUIT")  { prefWidth = 100; style = "-fx-base: #ff4444;" }
   private val saveButton  = new Button("SAVE")  { prefWidth = 100 }
 
-  val actionButtons = new VBox:
+  private val actionButtons = new VBox:
     spacing = 15
     alignment = Pos.Center
     children = Seq(startButton, pauseButton, resetButton, quitButton, saveButton)
 
-  val rc = new RowConstraints:
+  private val rc = new RowConstraints:
     percentHeight = 25
 
   rowConstraints = Seq(rc, rc, rc, rc)
 
-  val col0 = new ColumnConstraints:
+  private val col0 = new ColumnConstraints:
     hgrow = Priority.Always
 
-  val col1 = new ColumnConstraints:
+  private val col1 = new ColumnConstraints:
     hgrow = Priority.Never
     halignment = scalafx.geometry.HPos.Center
 
