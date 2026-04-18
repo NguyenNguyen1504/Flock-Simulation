@@ -2,7 +2,14 @@ package flock.logic
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
-class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Constants = Constants.default):
+object Flock:
+  val defaultBehaviors: Seq[SteeringBehavior] = Seq(Separation, Alignment, Cohesion)
+
+class Flock(
+  private val _boids: ArrayBuffer[Boid],
+  private val behaviors: Seq[SteeringBehavior] = Flock.defaultBehaviors,
+  private var _constants: Constants = Constants.default
+):
   
   def boids: Seq[Boid] = this._boids.toSeq
 
@@ -74,9 +81,9 @@ class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Const
     val allBoids = this._boids.toSeq
     for boid <- this._boids do
       val neighbors = findNeighbors(boid)
-      val s = Separation.calculate(boid, allBoids, this._constants)
-      val a = Alignment.calculate(boid, neighbors, this._constants)
-      val c = Cohesion.calculate(boid, neighbors, this._constants)
+      val s = Separation(boid, allBoids, this._constants)
+      val a = Alignment(boid, neighbors, this._constants)
+      val c = Cohesion(boid, neighbors, this._constants)
 
       val steeringForce = s * this._constants.separationWeight +
                           a * this._constants.alignmentWeight +
