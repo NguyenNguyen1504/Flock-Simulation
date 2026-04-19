@@ -80,17 +80,12 @@ class Flock(
   def update(deltaTime: Double): Unit =
     val allBoids = this._boids.toSeq
     for boid <- this._boids do
-      val neighbors = findNeighbors(boid)
-      val s = Separation(boid, allBoids, this._constants)
-      val a = Alignment(boid, neighbors, this._constants)
-      val c = Cohesion(boid, neighbors, this._constants)
-
-      val steeringForce = s * this._constants.separationWeight +
-                          a * this._constants.alignmentWeight +
-                          c * this._constants.cohesionWeight
-
-      boid.applyForce(steeringForce)
-
+      val totalForce = this.behaviors.map(behavior =>
+          val force = behavior.apply(boid, allBoids, this._constants)
+          val weight = behavior.weight(this._constants)
+          force * weight
+        ).reduce(_ + _)
+      boid.applyForce(totalForce)
     for boid <- this._boids do
       boid.update(deltaTime, this._constants)
 

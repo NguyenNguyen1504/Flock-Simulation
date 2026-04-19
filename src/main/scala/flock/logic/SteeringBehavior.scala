@@ -2,6 +2,7 @@ package flock.logic
 
 trait SteeringBehavior:
   def apply(boid: Boid, allBoids: Seq[Boid], c: Constants): Vector2D
+  def weight(c: Constants): Double 
 
   protected def perceptionNeighbors(boid: Boid, allBoids: Seq[Boid], c: Constants): Seq[Boid] =
     val rSquared = c.perceptionRadius * c.perceptionRadius
@@ -22,6 +23,8 @@ object Separation extends SteeringBehavior:
         val toAnother = boid.position - another.position
         toAnother * (1.0 / toAnother.magnitudeSquared())
       ).reduce(_ + _)
+      
+  def weight(c: Constants): Double = c.separationWeight
 end Separation
 
 
@@ -33,6 +36,8 @@ object Alignment extends SteeringBehavior:
     else
       val avgVelocity = neighbors.map(_.velocity).reduce(_ + _) * (1.0 / neighbors.size)
       avgVelocity - boid.velocity
+      
+  def weight(c: Constants): Double = c.alignmentWeight
 end Alignment
 
 
@@ -43,4 +48,6 @@ object Cohesion extends SteeringBehavior:
     else
       val centerOfMass = neighbors.map(_.position).reduce(_ + _) * (1.0 / neighbors.size)
       centerOfMass - boid.position
+      
+  def weight(c: Constants): Double = c.cohesionWeight
 end Cohesion
