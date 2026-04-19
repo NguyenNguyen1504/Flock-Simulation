@@ -1,106 +1,173 @@
-/* --- CẤU HÌNH TỔNG THỂ --- */
+/* ── Root ─────────────────────────────────────────────────────────────────── */
+
 .root {
     -fx-base: #1A1C23;
     -fx-background-color: #1A1C23;
 }
 
-/* --- THANH TRƯỢT (SLIDER) --- */
-
-/* 1. Phần rãnh nền (phần chìm bên phải) */
-.slider .track {
-    -fx-background-color: #0F111A;
-    -fx-background-insets: 0;
-    -fx-background-radius: 10;
-    -fx-pref-height: 6;
-    -fx-border-color: #2D3343;
-    -fx-border-width: 0.5;
-    -fx-border-radius: 10;
-}
-
-/* 2. Ép phần tiến trình (phần bên trái) phải hiển thị */
-.slider .bar {
-    -fx-background-color: #4ECDC4; /* Trùng màu nút tròn */
-    -fx-background-radius: 10;
-    -fx-background-insets: 0;
-    /* Đảm bảo phần bar luôn nằm trên track nhưng dưới thumb */
-    -fx-padding: 0 0 3 0;
-}
-
-/* 3. Nút tròn (Thumb) */
-.slider .thumb {
-    -fx-background-color: #4ECDC4; /* Trùng màu với phần bên trái */
-    -fx-background-radius: 50%;
-    -fx-padding: 11; /* Làm nút to hơn một chút để che được đầu dải màu */
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 5, 0, 0, 0);
-    -fx-cursor: hand;
-}
-
-/* Hiệu ứng khi kéo */
-.slider:pressed .thumb {
-    -fx-background-color: #55E7E0;
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-}
-
-/* --- CÁC NÚT BẤM --- */
-.button {
-    -fx-background-color: #2D3343;
-    -fx-text-fill: #ECEFF4;
-    -fx-background-radius: 6;
-    -fx-font-weight: bold;
-    -fx-padding: 8 15;
-}
-
-.button:hover {
-    -fx-background-color: #3B4252;
-}
-
-/* Nút QUIT đỏ nổi bật */
-#quit-button {
-    -fx-background-color: #BF616A;
-    -fx-text-fill: white;
-}
-
-#quit-button:hover {
-    -fx-background-color: #D08770;
-}
-
-/* --- PHẦN KHÁC --- */
-.label {
-    -fx-text-fill: #A6ACCD;
-}
-
-.spinner .text-field {
-    -fx-background-color: #0F111A;
-    -fx-text-fill: #4ECDC4;
-}
+/* ── Menu bar ─────────────────────────────────────────────────────────────── */
 
 .menu-bar {
     -fx-background-color: #15171E;
 }
 
-/* ── HUD Overlay ─────────────────────────────────────────────────────────── */
- 
+.menu-bar .label {
+    -fx-text-fill: #E0E4EE;
+    -fx-font-size: 13px;
+}
+
+/* ── Labels (global fallback) ─────────────────────────────────────────────── */
+
+.label {
+    -fx-text-fill: #A6ACCD;
+}
+
+/* ── Sliders ──────────────────────────────────────────────────────────────── */
+
+.flock-slider .track {
+    -fx-background-color: -track-color;
+    -fx-pref-height: 4px;
+    -fx-background-radius: 2px;
+}
+
+.flock-slider .thumb {
+    -fx-background-color: #4ECDC4;
+    -fx-background-radius: 50%;
+    -fx-pref-width: 14px;
+    -fx-pref-height: 14px;
+    -fx-effect: null;
+    -fx-cursor: hand;
+}
+
+.flock-slider .thumb:hover {
+    -fx-background-color: #6EDDD5;
+}
+
+.flock-slider .thumb:pressed {
+    -fx-background-color: #3ABDB5;
+}
+
+.flock-slider:focused .thumb {
+    -fx-effect: null;
+}
+
+/* ── Spinner ──────────────────────────────────────────────────────────────── */
+
+.flock-spinner {
+    -fx-background-color: #1C2030;
+    -fx-border-color: #2E3440;
+    -fx-border-width: 0.5px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+
+.flock-spinner .text-field {
+    -fx-background-color: #1C2030;
+    -fx-border-color: transparent;
+    -fx-text-fill: #E0E4EE;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-font-family: monospace;
+    -fx-alignment: center;
+    -fx-pref-height: 28px;
+}
+
+.flock-spinner .increment-arrow-button,
+.flock-spinner .decrement-arrow-button {
+    -fx-background-color: #1C2030;
+    -fx-border-color: transparent;
+    -fx-pref-width: 22px;
+}
+
+.flock-spinner .increment-arrow-button:hover,
+.flock-spinner .decrement-arrow-button:hover {
+    -fx-background-color: #252B3A;
+}
+
+.flock-spinner .increment-arrow,
+.flock-spinner .decrement-arrow {
+    -fx-background-color: #8892A4;
+    -fx-pref-height: 5px;
+}
+
+.flock-spinner .increment-arrow-button:hover .increment-arrow,
+.flock-spinner .decrement-arrow-button:hover .decrement-arrow {
+    -fx-background-color: #4ECDC4;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+
+.button {
+    -fx-background-color: transparent;
+    -fx-border-color: #2E3440;
+    -fx-border-width: 0.5px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #E0E4EE;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #1C2030;
+    -fx-text-fill: #ffffff;
+}
+
+.button:pressed {
+    -fx-background-color: #252B3A;
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+#quit-button {
+    -fx-border-color: #2E3440;
+    -fx-text-fill: #E0E4EE;
+}
+
+#quit-button:hover {
+    -fx-background-color: rgba(226, 75, 74, 0.1);
+    -fx-border-color: rgba(226, 75, 74, 0.35);
+    -fx-text-fill: #E24B4A;
+}
+
+/* ── Control panel — setting rows ─────────────────────────────────────────── */
+
+.setting-label {
+    -fx-text-fill: #E0E4EE;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.setting-value {
+    -fx-text-fill: #4ECDC4;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-font-family: monospace;
+}
+
+/* ── HUD overlay ──────────────────────────────────────────────────────────── */
+
 .hud-label {
     -fx-text-fill: #8892A4;
     -fx-font-size: 10px;
     -fx-font-family: monospace;
 }
- 
+
 .hud-value {
     -fx-text-fill: #4ECDC4;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-font-family: monospace;
 }
- 
+
 .hud-value-muted {
-    -fx-text-fill: #8892A4;
+    -fx-text-fill: #E0E4EE;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-font-family: monospace;
 }
- 
+
 .hud-value-running {
     -fx-text-fill: #4ECDC4;
     -fx-font-size: 12px;
