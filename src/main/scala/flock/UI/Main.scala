@@ -16,7 +16,7 @@ object Main extends JFXApp3:
         println(s"Error in loading file: ${e.getMessage}")
         new Flock(ArrayBuffer.empty)
 
-    val originalBoids = flock.boids
+    var originalBoids = flock.boids
 
     val constants = flock.constants
     val initialFlockSize = flock.boids.size
@@ -32,6 +32,7 @@ object Main extends JFXApp3:
       scene = mainScene
     
     mainScene.sync(flock)
+    mainScene.render(flock)
 
     var lastTime = 0L
     val timer = AnimationTimer( now =>
@@ -59,22 +60,42 @@ object Main extends JFXApp3:
 
     mainScene.onQuit { stage.close() }
 
+    mainScene.onFlockSizeChange { n =>
+      flock.setSize(n)
+      mainScene.sync(flock)
+    }
+
+    mainScene.onOpen {
+      FlockFileDialog.showOpen(stage).foreach { file =>
+        FlockFileIO.loadFlockFromFile(file.getPath) match
+          case Success(f) =>
+            originalBoids = f.boids
+            flock.resetWith(originalBoids)
+            mainScene.sync(flock)
+            mainScene.render(flock)
+            mainScene.updateFlockSize(originalBoids.size)
+          case Failure(e) => println(s"Load failed: ${e.getMessage}")
+      }
+    }
+
     mainScene.onSave {
       FlockFileIO.saveFlockToFile(flock, "data/save.json") match
         case Success(_) => println("Saved successfully")
         case Failure(e) => println(s"Save failed: ${e.getMessage}")
     }
 
-    mainScene.onFlockSizeChange { n =>
-      flock.setSize(n)
-      mainScene.sync(flock)
+    mainScene.onSaveAs {
+      FlockFileDialog.showSaveAs(stage).foreach { file =>
+        FlockFileIO.saveFlockToFile(flock, file.getPath) match
+          case Success(_) => println("Saved successfully")
+          case Failure(e) => println(s"Save failed: ${e.getMessage}")
+      }
     }
 
     mainScene.onSeparationWeightChange { flock.updateSeparationWeight(_) }
     mainScene.onAlignmentWeightChange  { flock.updateAlignmentWeight(_) }
     mainScene.onCohesionWeightChange   { flock.updateCohesionWeight(_) }
 
-    timer.start()
 
   end start
 

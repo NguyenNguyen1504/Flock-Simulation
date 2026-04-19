@@ -27,12 +27,11 @@ class ControlPanel(initialFlockSize: Int, constants: Constants) extends GridPane
   private val pauseButton = new Button("PAUSE") { prefWidth = 100 }
   private val resetButton = new Button("RESET") { prefWidth = 100 }
   private val quitButton  = new Button("QUIT")  { prefWidth = 100; style = "-fx-base: #ff4444;" }
-  private val saveButton  = new Button("SAVE")  { prefWidth = 100 }
 
   private val actionButtons = new VBox:
     spacing = 15
     alignment = Pos.Center
-    children = Seq(startButton, pauseButton, resetButton, quitButton, saveButton)
+    children = Seq(startButton, pauseButton, resetButton, quitButton)
 
   private val rc = new RowConstraints:
     percentHeight = 25
@@ -60,7 +59,6 @@ class ControlPanel(initialFlockSize: Int, constants: Constants) extends GridPane
   def onPause(action: => Unit): Unit  = pauseButton.onAction = _ => action
   def onReset(action: => Unit): Unit  = resetButton.onAction = _ => action
   def onQuit(action: => Unit): Unit   = quitButton.onAction  = _ => action
-  def onSave(action: => Unit): Unit   = saveButton.onAction  = _ => action
 
   def onFlockSizeChange(action: Int => Unit): Unit           = flockSizeSetting.onChange(action)
   def onSeparationWeightChange(action: Double => Unit): Unit = separationWeightSetting.onChange(action)
