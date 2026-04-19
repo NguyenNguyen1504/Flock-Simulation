@@ -16,7 +16,7 @@ object Main extends JFXApp3:
         println(s"Error in loading file: ${e.getMessage}")
         new Flock(ArrayBuffer.empty)
 
-    val originalBoids = flock.boids
+    var originalBoids = flock.boids
 
     val constants = flock.constants
     val initialFlockSize = flock.boids.size
@@ -32,6 +32,7 @@ object Main extends JFXApp3:
       scene = mainScene
     
     mainScene.sync(flock)
+    mainScene.render(flock)
 
     var lastTime = 0L
     val timer = AnimationTimer( now =>
@@ -68,9 +69,11 @@ object Main extends JFXApp3:
       FlockFileDialog.showOpen(stage).foreach { file =>
         FlockFileIO.loadFlockFromFile(file.getPath) match
           case Success(f) =>
-            flock.resetWith(f.boids)
+            originalBoids = f.boids
+            flock.resetWith(originalBoids)
             mainScene.sync(flock)
-            mainScene.updateFlockSize(f.boids.size)
+            mainScene.render(flock)
+            mainScene.updateFlockSize(originalBoids.size)
           case Failure(e) => println(s"Load failed: ${e.getMessage}")
       }
     }
@@ -93,7 +96,6 @@ object Main extends JFXApp3:
     mainScene.onAlignmentWeightChange  { flock.updateAlignmentWeight(_) }
     mainScene.onCohesionWeightChange   { flock.updateCohesionWeight(_) }
 
-    timer.start()
 
   end start
 
