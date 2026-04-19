@@ -11,7 +11,7 @@ class Flock(
   private var _constants: Constants = Constants.default
 ):
   
-  def boids: Seq[Boid] = this._boids.toSeq
+  def boids: Seq[Boid] = this._boids.map(b => Boid(b.position, b.velocity)).toSeq
 
   def addBoid(boid: Boid): Unit =
     this._boids += boid
@@ -91,12 +91,10 @@ class Flock(
   def updateCohesionWeight(w: Double): Unit   = this.updateConstants(this._constants.copy(cohesionWeight   = w))
 
   def setSize(newSize: Int): Unit =
-    val currentSize = this.boids.size
+    val currentSize = this._boids.size
       if newSize > currentSize then
         this.addRandomBoids(newSize - currentSize)
       else if newSize < currentSize then
         this.removeRandomBoids(currentSize - newSize)
-
-  def snapshot(): Seq[Boid] = this._boids.map(b => Boid(b.position, b.velocity)).toSeq
 
 end Flock

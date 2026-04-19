@@ -16,7 +16,7 @@ object Main extends JFXApp3:
         println(s"Error in loading file: ${e.getMessage}")
         new Flock(ArrayBuffer.empty)
 
-    val originalBoids = flock.snapshot()
+    val originalBoids = flock.boids
 
     val constants = flock.constants
     val initialFlockSize = flock.boids.size
