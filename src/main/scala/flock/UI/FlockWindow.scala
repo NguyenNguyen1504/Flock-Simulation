@@ -14,8 +14,9 @@ class FlockWindow(constants: Constants) extends Pane:
   minWidth = 800
   minHeight = 400
   background = new Background(Array(
-               new BackgroundFill(Color.color(0.871, 0.871, 0.847), CornerRadii.Empty, Insets(0))
+               new BackgroundFill(Color.web("#0B0E14"), CornerRadii.Empty, Insets(0))
                ))
+  style = "-fx-border-color: #4C566A; -fx-border-width: 1; -fx-border-style: solid;"
   // Boids
   private val boidShapes = ArrayBuffer[Polygon]()
   private val boidGroup = new Group()
@@ -24,7 +25,7 @@ class FlockWindow(constants: Constants) extends Pane:
   private def createBoidShapes(): Polygon =
     new Polygon:
       points ++= Seq(-6.0, -5.0, 6.0, 0.0, -6.0, 5.0)
-      fill = Color.Black
+      fill = Color.web("#4ECDC4")
 
   def sync(boids: Seq[Boid]): Unit =
     val diff = boids.size - boidShapes.size

@@ -18,6 +18,7 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
   mainLayout.center = flockWindow
   mainLayout.bottom = controlPanel
 
+  this.stylesheets.add("file:data/dark-theme.css")
   this.root = mainLayout
 
   // Flock display
