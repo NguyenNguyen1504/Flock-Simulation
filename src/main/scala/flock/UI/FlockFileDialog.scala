@@ -6,8 +6,11 @@ import java.io.File
 
 object FlockFileDialog:
 
+  private val dataDirectory = new File("data")
+
   private def makeChooser(dialogTitle: String): FileChooser = new FileChooser:
     this.title = dialogTitle
+    initialDirectory = if dataDirectory.exists() then dataDirectory else new File(".")
     extensionFilters.add(new ExtensionFilter("JSON Files", "*.json"))
 
   def showOpen(owner: Stage): Option[File] =
