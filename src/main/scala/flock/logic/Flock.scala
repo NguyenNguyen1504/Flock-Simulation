@@ -2,9 +2,16 @@ package flock.logic
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
-class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Constants = Constants.default):
+object Flock:
+  val defaultBehaviors: Seq[SteeringBehavior] = Seq(Separation, Alignment, Cohesion)
+
+class Flock(
+  private val _boids: ArrayBuffer[Boid],
+  private val behaviors: Seq[SteeringBehavior] = Flock.defaultBehaviors,
+  private var _constants: Constants = Constants.default
+):
   
-  def boids: Seq[Boid] = this._boids.toSeq
+  def boids: Seq[Boid] = this._boids.map(b => Boid(b.position, b.velocity)).toSeq
 
   def addBoid(boid: Boid): Unit =
     this._boids += boid
@@ -60,30 +67,15 @@ class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Const
     this._boids.clear()
     this._boids ++= newBoids.map(boid => Boid(boid.position, boid.velocity))
 
-  def findNeighbors(target: Boid): Seq[Boid] =
-    val rSquared = this._constants.perceptionRadius * this._constants.perceptionRadius
-    val maxAngle = this._constants.perceptionAngle / 2
-    this._boids.filter(boid =>
-      boid != target &&
-      boid.distanceSquared(target) <= rSquared &&
-      target.angle(boid) <= maxAngle
-    ).toSeq
-
-
   def update(deltaTime: Double): Unit =
     val allBoids = this._boids.toSeq
     for boid <- this._boids do
-      val neighbors = findNeighbors(boid)
-      val s = Separation.calculate(boid, allBoids, this._constants)
-      val a = Alignment.calculate(boid, neighbors, this._constants)
-      val c = Cohesion.calculate(boid, neighbors, this._constants)
-
-      val steeringForce = s * this._constants.separationWeight +
-                          a * this._constants.alignmentWeight +
-                          c * this._constants.cohesionWeight
-
-      boid.applyForce(steeringForce)
-
+      val totalForce = this.behaviors.map(behavior =>
+          val force = behavior.apply(boid, allBoids, this._constants)
+          val weight = behavior.weight(this._constants)
+          force * weight
+        ).reduce(_ + _)
+      boid.applyForce(totalForce)
     for boid <- this._boids do
       boid.update(deltaTime, this._constants)
 
@@ -99,12 +91,10 @@ class Flock(private val _boids: ArrayBuffer[Boid], private var _constants: Const
   def updateCohesionWeight(w: Double): Unit   = this.updateConstants(this._constants.copy(cohesionWeight   = w))
 
   def setSize(newSize: Int): Unit =
-    val currentSize = this.boids.size
-      if newSize > currentSize then
-        this.addRandomBoids(newSize - currentSize)
-      else if newSize < currentSize then
-        this.removeRandomBoids(currentSize - newSize)
-
-  def snapshot(): Seq[Boid] = this._boids.map(b => Boid(b.position, b.velocity)).toSeq
+    val currentSize = this._boids.size
+    if newSize > currentSize then
+      this.addRandomBoids(newSize - currentSize)
+    else if newSize < currentSize then
+      this.removeRandomBoids(currentSize - newSize)
 
 end Flock
