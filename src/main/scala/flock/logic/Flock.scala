@@ -67,16 +67,6 @@ class Flock(
     this._boids.clear()
     this._boids ++= newBoids.map(boid => Boid(boid.position, boid.velocity))
 
-  def findNeighbors(target: Boid): Seq[Boid] =
-    val rSquared = this._constants.perceptionRadius * this._constants.perceptionRadius
-    val maxAngle = this._constants.perceptionAngle / 2
-    this._boids.filter(boid =>
-      boid != target &&
-      boid.distanceSquared(target) <= rSquared &&
-      target.angle(boid) <= maxAngle
-    ).toSeq
-
-
   def update(deltaTime: Double): Unit =
     val allBoids = this._boids.toSeq
     for boid <- this._boids do
