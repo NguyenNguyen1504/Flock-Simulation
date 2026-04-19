@@ -92,9 +92,9 @@ class Flock(
 
   def setSize(newSize: Int): Unit =
     val currentSize = this._boids.size
-      if newSize > currentSize then
-        this.addRandomBoids(newSize - currentSize)
-      else if newSize < currentSize then
-        this.removeRandomBoids(currentSize - newSize)
+    if newSize > currentSize then
+      this.addRandomBoids(newSize - currentSize)
+    else if newSize < currentSize then
+      this.removeRandomBoids(currentSize - newSize)
 
 end Flock
