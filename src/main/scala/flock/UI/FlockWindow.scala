@@ -13,7 +13,6 @@ class FlockWindow(constants: Constants) extends Pane:
   // Frame
   minWidth = 800
   minHeight = 400
-  maxHeight = 400
   background = new Background(Array(
                new BackgroundFill(Color.color(0.871, 0.871, 0.847), CornerRadii.Empty, Insets(0))
                ))
@@ -51,10 +50,9 @@ class FlockWindow(constants: Constants) extends Pane:
       shape.rotate = math.toDegrees(math.atan2(boid.velocity.y, boid.velocity.x))
     }
 
-  private val clipRectangle = new Rectangle:
-    width = constants.worldWidth
-    height = constants.worldHeight
-
+  private val clipRectangle = new Rectangle()
+  clipRectangle.width  <== this.width
+  clipRectangle.height <== this.height
   this.clip = clipRectangle
 
 
