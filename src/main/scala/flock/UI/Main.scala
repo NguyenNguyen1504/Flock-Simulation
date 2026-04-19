@@ -59,15 +59,34 @@ object Main extends JFXApp3:
 
     mainScene.onQuit { stage.close() }
 
+    mainScene.onFlockSizeChange { n =>
+      flock.setSize(n)
+      mainScene.sync(flock)
+    }
+
+    mainScene.onOpen {
+      FlockFileDialog.showOpen(stage).foreach { file =>
+        FlockFileIO.loadFlockFromFile(file.getPath) match
+          case Success(f) =>
+            flock.resetWith(f.boids)
+            mainScene.sync(flock)
+            mainScene.updateFlockSize(f.boids.size)
+          case Failure(e) => println(s"Load failed: ${e.getMessage}")
+      }
+    }
+
     mainScene.onSave {
       FlockFileIO.saveFlockToFile(flock, "data/save.json") match
         case Success(_) => println("Saved successfully")
         case Failure(e) => println(s"Save failed: ${e.getMessage}")
     }
 
-    mainScene.onFlockSizeChange { n =>
-      flock.setSize(n)
-      mainScene.sync(flock)
+    mainScene.onSaveAs {
+      FlockFileDialog.showSaveAs(stage).foreach { file =>
+        FlockFileIO.saveFlockToFile(flock, file.getPath) match
+          case Success(_) => println("Saved successfully")
+          case Failure(e) => println(s"Save failed: ${e.getMessage}")
+      }
     }
 
     mainScene.onSeparationWeightChange { flock.updateSeparationWeight(_) }
