@@ -93,6 +93,8 @@ class Flock(
   def updateSeparationWeight(w: Double): Unit = this.updateConstants(this._constants.copy(separationWeight = w))
   def updateAlignmentWeight(w: Double): Unit  = this.updateConstants(this._constants.copy(alignmentWeight  = w))
   def updateCohesionWeight(w: Double): Unit   = this.updateConstants(this._constants.copy(cohesionWeight   = w))
+  
+  def updateWorldSize(w: Double, h: Double): Unit = this.updateConstants(this._constants.copy(worldWidth = w, worldHeight = h))
 
   def setSize(newSize: Int): Unit =
     val currentSize = this._boids.size

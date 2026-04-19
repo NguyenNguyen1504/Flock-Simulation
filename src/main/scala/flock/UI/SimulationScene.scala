@@ -42,6 +42,10 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
   def onAlignmentWeightChange(action: Double=> Unit): Unit   = controlPanel.onAlignmentWeightChange(action)
   def onCohesionWeightChange(action: Double => Unit): Unit   = controlPanel.onCohesionWeightChange(action)
 
+  def onWorldSizeChange(action: (Double, Double) => Unit): Unit =
+    flockWindow.width.onChange((_, _, w) => action(w.doubleValue, flockWindow.height.value))
+    flockWindow.height.onChange((_, _, h) => action(flockWindow.width.value, h.doubleValue))
+
   def updateFlockSize(n: Int): Unit = controlPanel.setFlockSize(n)
 
 end SimulationScene

@@ -96,6 +96,8 @@ object Main extends JFXApp3:
     mainScene.onAlignmentWeightChange  { flock.updateAlignmentWeight(_) }
     mainScene.onCohesionWeightChange   { flock.updateCohesionWeight(_) }
 
+    mainScene.onWorldSizeChange        { flock.updateWorldSize(_,_) }
+
 
   end start
 
