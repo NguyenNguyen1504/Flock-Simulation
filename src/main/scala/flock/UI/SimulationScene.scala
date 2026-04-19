@@ -28,7 +28,10 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
 
   def render(flock: Flock): Unit =
     flockWindow.render(flock.boids)
-  
+
+  def updateHud(boidCount: Int, fps: Double, isRunning: Boolean): Unit =
+    flockWindow.updateHud(boidCount, fps, isRunning)
+
   def onOpen(action: => Unit): Unit   = menuBar.onOpen(action)
   def onSave(action: => Unit): Unit   = menuBar.onSave(action)
   def onSaveAs(action: => Unit): Unit = menuBar.onSaveAs(action)
