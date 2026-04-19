@@ -65,7 +65,11 @@ class Flock(
 
   def resetWith(newBoids: Seq[Boid]): Unit =
     this._boids.clear()
-    this._boids ++= newBoids.map(boid => Boid(boid.position, boid.velocity))
+    this._boids ++= newBoids.map { b =>
+      val newBoid = Boid(b.position, b.velocity)
+      newBoid.wrapAround(this._constants)
+      newBoid
+    }
 
   def update(deltaTime: Double): Unit =
     val allBoids = this._boids.toSeq
