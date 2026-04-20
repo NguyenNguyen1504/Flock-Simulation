@@ -5,6 +5,7 @@ import org.scalatest.matchers.should.Matchers
 
 class BoidTest extends AnyFlatSpec with Matchers:
 
+  val cd = Constants.default
   "Boid" should "correctly calculate the squared distance to another boid" in {
     val boid1 = Boid(Vector2D(4,3), Vector2D(3,3))
     val boid2 = Boid(Vector2D(0,0), Vector2D(2,1))
@@ -32,7 +33,7 @@ class BoidTest extends AnyFlatSpec with Matchers:
   }
   it should "limit its velocity to maxSpeed in update" in {
     val boid = new Boid(Vector2D(0, 0), Vector2D(10, 0))
-    boid.update(0.1) // deltaTime
+    boid.update(0.1, cd) 
     boid.velocity.magnitude() should be <= Constants.maxSpeed
   }
   it should "correctly update velocity and position when a force is applied" in {
@@ -49,7 +50,7 @@ class BoidTest extends AnyFlatSpec with Matchers:
     // Step 1: force = truncate(2, 0.15) = 0.15, mass = 1 => acc = 0.15
     // Step 2: v_new = v_old + a * dt = 1 + 0.15 * 1.0 = 1.15
     // Step 3: p_new = p_old + v_new * dt = 0 + 1.15 * 1.0 = 1.15
-    boid.update(1.0)
+    boid.update(1.0, cd)
 
     boid.velocity.x shouldBe (1.15 +- 0.001)
     boid.position.x shouldBe (1.15 +- 0.001)
@@ -57,12 +58,12 @@ class BoidTest extends AnyFlatSpec with Matchers:
   it should "reset steering force to zero after update is called" in {
   val boid = Boid(Vector2D(0, 0), Vector2D(1, 0))
   boid.applyForce(Vector2D(1, 1))
-  boid.update(0.1)
+  boid.update(0.1, cd)
 
   // Indirect testing: calling update without applying a new force
   // Speed should not change because acceleration is now 0
   val velAfterFirstUpdate = boid.velocity
-  boid.update(0.1)
+  boid.update(0.1, cd)
   boid.velocity shouldBe velAfterFirstUpdate
   }
 
@@ -71,7 +72,7 @@ class BoidTest extends AnyFlatSpec with Matchers:
     val hugeForce = Vector2D(9999, 0)
 
     boid.applyForce(hugeForce)
-    boid.update(1.0)
+    boid.update(1.0, cd)
 
     // acceleration <= maxForce / mass
     // v_new <= maxSpeed (if v_old = 0 and mass = 1)
@@ -80,7 +81,7 @@ class BoidTest extends AnyFlatSpec with Matchers:
   it should "not change position or velocity if deltaTime is zero" in {
   val boid = Boid(Vector2D(5, 5), Vector2D(2, 2))
   boid.applyForce(Vector2D(1, 1))
-  boid.update(0.0)
+  boid.update(0.0, cd)
 
   boid.position shouldBe Vector2D(5, 5)
   boid.velocity shouldBe Vector2D(2, 2)
