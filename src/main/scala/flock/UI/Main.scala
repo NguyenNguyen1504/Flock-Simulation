@@ -89,6 +89,8 @@ object Main extends JFXApp3:
 
     mainScene.onToggleHud { _ => mainScene.toggleHud() }
 
+    mainScene.onThemeChange { _ => /* theme swap handled inside SimulationScene */ }
+
     mainScene.onOpen {
       FlockFileDialog.showOpen(stage).foreach { file =>
         FlockFileIO.loadFlockFromFile(file.getPath) match
