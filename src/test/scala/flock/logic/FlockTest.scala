@@ -122,12 +122,11 @@ class FlockTest extends AnyFlatSpec with Matchers:
   result shouldBe Vector2D(0, 0)
  }
   "Flock.update" should "move boids correctly based on velocity and deltaTime" in {
-    Constants.maxSpeed = 100.0
-    Constants.maxSteeringForce = 0.0
-
     val boid = Boid(Vector2D(10, 10), Vector2D(5, -2))
     val flock = Flock(ArrayBuffer(boid))
 
+    val newC = flock.constants.copy(maxSpeed = 100.0, maxSteeringForce = 0.0)
+    flock.updateConstants(newC)
     flock.update(2.0)
 
     boid.position.x shouldBe 20.0
@@ -154,12 +153,11 @@ class FlockTest extends AnyFlatSpec with Matchers:
   }
 
   it should "strictly limit velocity to Constants.maxSpeed" in {
-    Constants.maxSpeed = 5.0
-    Constants.maxSteeringForce = 100.0
-
     val boid = Boid(Vector2D(0, 0), Vector2D(10, 10))
     val flock = Flock(ArrayBuffer(boid))
 
+    val newC = flock.constants.copy(maxSpeed = 5.0, maxSteeringForce = 100.0)
+    flock.updateConstants(newC)
     flock.update(0.1)
 
     boid.velocity.magnitude() shouldBe <= (5.0 + 1e-9)
