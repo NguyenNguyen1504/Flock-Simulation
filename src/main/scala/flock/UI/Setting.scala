@@ -37,7 +37,7 @@ class SliderSetting(val labelName: String, minValue: Double, maxValue: Double, i
     val pct = fillPercent(v)
     slider.style =
       s"-fx-background-color: transparent;" +
-      s"-track-color: linear-gradient(to right, #4ECDC4 $pct%, #2E3440 $pct%);"
+      s"-track-color: linear-gradient(to right, #4ECDC4 $pct%, #D8DEE9 $pct%);"
 
   updateTrack(initial)
   slider.value.onChange((_, _, v) => updateTrack(v.doubleValue()))
