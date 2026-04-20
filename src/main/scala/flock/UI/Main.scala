@@ -23,13 +23,13 @@ object Main extends JFXApp3:
     val mainScene        = new SimulationScene(initialFlockSize, constants)
 
     stage = new JFXApp3.PrimaryStage():
-      title    = "Flock Simulation"
-      height   = 840
-      width    = 840
-      minWidth = 800
+      title     = "Flock Simulation"
+      height    = 840
+      width     = 840
+      minWidth  = 800
       minHeight = 800
       resizable = true
-      scene    = mainScene
+      scene     = mainScene
 
     mainScene.sync(flock)
     mainScene.render(flock)
@@ -39,8 +39,8 @@ object Main extends JFXApp3:
     var isRunning = false
 
     // FPS smoothing: rolling average over ~30 frames
-    val fpsBuffer  = Array.fill(30)(0.0)
-    var fpsIndex   = 0
+    val fpsBuffer = Array.fill(30)(0.0)
+    var fpsIndex  = 0
 
     val timer = AnimationTimer { now =>
       if lastTime != 0L then
@@ -48,7 +48,6 @@ object Main extends JFXApp3:
         flock.update(dt)
         mainScene.render(flock)
 
-        // FPS
         val rawFps = if dt > 0 then 1.0 / dt else 0.0
         fpsBuffer(fpsIndex % fpsBuffer.length) = rawFps
         fpsIndex += 1
@@ -58,7 +57,7 @@ object Main extends JFXApp3:
       lastTime = now
     }
 
-    // Wire UI → Logic
+    // ── Wire UI → Logic ───────────────────────────────────────────────────
 
     mainScene.onStart {
       isRunning = true
@@ -87,6 +86,8 @@ object Main extends JFXApp3:
       mainScene.sync(flock)
       mainScene.updateHud(n, 0, isRunning)
     }
+
+    mainScene.onToggleHud { _ => mainScene.toggleHud() }
 
     mainScene.onOpen {
       FlockFileDialog.showOpen(stage).foreach { file =>
