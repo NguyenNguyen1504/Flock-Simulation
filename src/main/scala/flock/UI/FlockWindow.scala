@@ -67,6 +67,9 @@ class FlockWindow(constants: Constants) extends Pane:
       statusLabel.text = "● PAUSED"
       statusLabel.styleClass.setAll("hud-value-muted")
 
+  def toggleHud(): Unit =
+    hudBox.visible = !hudBox.visible.value
+
   // ── Sync / Render ─────────────────────────────────────────────────────────
 
   def sync(boids: Seq[Boid]): Unit =

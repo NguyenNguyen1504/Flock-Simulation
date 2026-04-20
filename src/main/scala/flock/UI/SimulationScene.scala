@@ -21,7 +21,7 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
   this.stylesheets.add("file:data/dark-theme.css")
   this.root = mainLayout
 
-  // Flock display
+  // ── Flock display ─────────────────────────────────────────────────────────
 
   def sync(flock: Flock): Unit =
     flockWindow.sync(flock.boids)
@@ -32,9 +32,16 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
   def updateHud(boidCount: Int, fps: Double, isRunning: Boolean): Unit =
     flockWindow.updateHud(boidCount, fps, isRunning)
 
-  def onOpen(action: => Unit): Unit   = menuBar.onOpen(action)
-  def onSave(action: => Unit): Unit   = menuBar.onSave(action)
-  def onSaveAs(action: => Unit): Unit = menuBar.onSaveAs(action)
+  // ── Menu bar ──────────────────────────────────────────────────────────────
+
+  def onOpen(action: => Unit): Unit         = menuBar.onOpen(action)
+  def onSave(action: => Unit): Unit         = menuBar.onSave(action)
+  def onSaveAs(action: => Unit): Unit       = menuBar.onSaveAs(action)
+  def onToggleHud(action: Boolean => Unit): Unit = menuBar.onToggleHud(action)
+
+  def toggleHud(): Unit = flockWindow.toggleHud()
+
+  // ── Control panel ─────────────────────────────────────────────────────────
 
   def onStart(action: => Unit): Unit = controlPanel.onStart(action)
   def onPause(action: => Unit): Unit = controlPanel.onPause(action)
@@ -43,7 +50,7 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
 
   def onFlockSizeChange(action: Int => Unit): Unit           = controlPanel.onFlockSizeChange(action)
   def onSeparationWeightChange(action: Double => Unit): Unit = controlPanel.onSeparationWeightChange(action)
-  def onAlignmentWeightChange(action: Double=> Unit): Unit   = controlPanel.onAlignmentWeightChange(action)
+  def onAlignmentWeightChange(action: Double => Unit): Unit  = controlPanel.onAlignmentWeightChange(action)
   def onCohesionWeightChange(action: Double => Unit): Unit   = controlPanel.onCohesionWeightChange(action)
 
   def onWorldSizeChange(action: (Double, Double) => Unit): Unit =
