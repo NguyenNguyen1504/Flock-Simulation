@@ -7,6 +7,9 @@ import scalafx.scene.layout.BorderPane
 
 class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene:
 
+  private val darkThemePath  = "file:data/dark-theme.css"
+  private val lightThemePath = "file:data/light-theme.css"
+
   private val mainLayout = new BorderPane():
     padding = Insets(20, 20, 20, 20)
 
@@ -18,7 +21,7 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
   mainLayout.center = flockWindow
   mainLayout.bottom = controlPanel
 
-  this.stylesheets.add("file:data/dark-theme.css")
+  this.stylesheets.add(darkThemePath)
   this.root = mainLayout
 
   // ── Flock display ─────────────────────────────────────────────────────────
@@ -34,12 +37,21 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
 
   // ── Menu bar ──────────────────────────────────────────────────────────────
 
-  def onOpen(action: => Unit): Unit         = menuBar.onOpen(action)
-  def onSave(action: => Unit): Unit         = menuBar.onSave(action)
-  def onSaveAs(action: => Unit): Unit       = menuBar.onSaveAs(action)
+  def onOpen(action: => Unit): Unit              = menuBar.onOpen(action)
+  def onSave(action: => Unit): Unit              = menuBar.onSave(action)
+  def onSaveAs(action: => Unit): Unit            = menuBar.onSaveAs(action)
   def onToggleHud(action: Boolean => Unit): Unit = menuBar.onToggleHud(action)
 
   def toggleHud(): Unit = flockWindow.toggleHud()
+
+  def onThemeChange(action: String => Unit): Unit =
+    menuBar.onThemeChange { theme =>
+      this.stylesheets.clear()
+      theme match
+        case "light" => this.stylesheets.add(lightThemePath)
+        case _       => this.stylesheets.add(darkThemePath)
+      action(theme)
+    }
 
   // ── Control panel ─────────────────────────────────────────────────────────
 
