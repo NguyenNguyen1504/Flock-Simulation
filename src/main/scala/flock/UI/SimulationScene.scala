@@ -7,8 +7,13 @@ import scalafx.scene.layout.BorderPane
 
 class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene:
 
-  private val darkThemePath  = "file:data/dark-theme.css"
-  private val lightThemePath = "file:data/light-theme.css"
+  private def cssPath(filename: String): String =
+    Option(getClass.getResource(s"/css/$filename")) match
+      case Some(url) => url.toExternalForm
+      case None      => s"file:data/$filename"
+
+  private val darkThemePath  = cssPath("dark-theme.css")
+  private val lightThemePath = cssPath("light-theme.css")
 
   private val mainLayout = new BorderPane():
     padding = Insets(20, 20, 20, 20)
