@@ -18,44 +18,65 @@ object Main extends JFXApp3:
 
     var originalBoids = flock.boids
 
-    val constants = flock.constants
+    val constants        = flock.constants
     val initialFlockSize = flock.boids.size
-    val mainScene = new SimulationScene(initialFlockSize, constants)
+    val mainScene        = new SimulationScene(initialFlockSize, constants)
 
     stage = new JFXApp3.PrimaryStage():
-      title = "Flock Simulation"
-      height = 840
-      width = 840
-      minWidth = 800
+      title     = "Flock Simulation"
+      height    = 840
+      width     = 840
+      minWidth  = 800
       minHeight = 800
       resizable = true
-      scene = mainScene
-    
+      scene     = mainScene
+
     mainScene.sync(flock)
     mainScene.render(flock)
+    mainScene.updateHud(flock.boids.size, 0, isRunning = false)
 
-    var lastTime = 0L
-    val timer = AnimationTimer( now =>
+    var lastTime  = 0L
+    var isRunning = false
+
+    // FPS smoothing: rolling average over ~30 frames
+    val fpsBuffer = Array.fill(30)(0.0)
+    var fpsIndex  = 0
+
+    val timer = AnimationTimer { now =>
       if lastTime != 0L then
-        val dt = (now - lastTime) / 1000000000.0
+        val dt  = (now - lastTime) / 1_000_000_000.0
         flock.update(dt)
         mainScene.render(flock)
+
+        val rawFps = if dt > 0 then 1.0 / dt else 0.0
+        fpsBuffer(fpsIndex % fpsBuffer.length) = rawFps
+        fpsIndex += 1
+        val avgFps = fpsBuffer.sum / fpsBuffer.length
+
+        mainScene.updateHud(flock.boids.size, avgFps, isRunning)
       lastTime = now
-    )
+    }
 
-    // Wire UI → Logic
+    // ── Wire UI → Logic ───────────────────────────────────────────────────
 
-    mainScene.onStart { timer.start() }
+    mainScene.onStart {
+      isRunning = true
+      mainScene.updateHud(flock.boids.size, 0, isRunning)
+      timer.start()
+    }
 
     mainScene.onPause {
+      isRunning = false
       timer.stop()
       lastTime = 0L
+      mainScene.updateHud(flock.boids.size, 0, isRunning)
     }
 
     mainScene.onReset {
       flock.resetWith(originalBoids)
       mainScene.sync(flock)
       mainScene.updateFlockSize(originalBoids.size)
+      mainScene.updateHud(flock.boids.size, 0, isRunning)
     }
 
     mainScene.onQuit { stage.close() }
@@ -63,7 +84,12 @@ object Main extends JFXApp3:
     mainScene.onFlockSizeChange { n =>
       flock.setSize(n)
       mainScene.sync(flock)
+      mainScene.updateHud(n, 0, isRunning)
     }
+
+    mainScene.onToggleHud { _ => mainScene.toggleHud() }
+
+    mainScene.onThemeChange { _ => /* theme swap handled inside SimulationScene */ }
 
     mainScene.onOpen {
       FlockFileDialog.showOpen(stage).foreach { file =>
@@ -74,6 +100,7 @@ object Main extends JFXApp3:
             mainScene.sync(flock)
             mainScene.render(flock)
             mainScene.updateFlockSize(originalBoids.size)
+            mainScene.updateHud(flock.boids.size, 0, isRunning)
           case Failure(e) => println(s"Load failed: ${e.getMessage}")
       }
     }
@@ -96,8 +123,7 @@ object Main extends JFXApp3:
     mainScene.onAlignmentWeightChange  { flock.updateAlignmentWeight(_) }
     mainScene.onCohesionWeightChange   { flock.updateCohesionWeight(_) }
 
-    mainScene.onWorldSizeChange        { flock.updateWorldSize(_,_) }
-
+    mainScene.onWorldSizeChange        { flock.updateWorldSize(_, _) }
 
   end start
 

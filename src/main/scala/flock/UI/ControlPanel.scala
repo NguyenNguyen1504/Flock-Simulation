@@ -26,7 +26,7 @@ class ControlPanel(initialFlockSize: Int, constants: Constants) extends GridPane
   private val startButton = new Button("START") { prefWidth = 100 }
   private val pauseButton = new Button("PAUSE") { prefWidth = 100 }
   private val resetButton = new Button("RESET") { prefWidth = 100 }
-  private val quitButton  = new Button("QUIT")  { prefWidth = 100; style = "-fx-base: #ff4444;" }
+  private val quitButton  = new Button("QUIT")  { prefWidth = 100; id = "quit-button" }
 
   private val actionButtons = new VBox:
     spacing = 15

@@ -1,0 +1,232 @@
+/* ── Root ─────────────────────────────────────────────────────────────────── */
+
+.root {
+    -fx-base: #F0F2F8;
+    -fx-background-color: #F0F2F8;
+}
+
+/* ── Menu bar ─────────────────────────────────────────────────────────────── */
+
+.menu-bar {
+    -fx-background-color: #E8EAF2;
+}
+
+.menu-bar .label {
+    -fx-text-fill: #2C3050;
+    -fx-font-size: 13px;
+}
+
+/* ── Labels (global fallback) ─────────────────────────────────────────────── */
+
+.label {
+    -fx-text-fill: #4A5070;
+}
+
+/* ── Sliders ──────────────────────────────────────────────────────────────── */
+
+.flock-slider .track {
+    -fx-background-color: -track-color;
+    -fx-pref-height: 4px;
+    -fx-background-radius: 2px;
+}
+
+.flock-slider .thumb {
+    -fx-background-color: #1A8F8A;
+    -fx-background-radius: 50%;
+    -fx-pref-width: 14px;
+    -fx-pref-height: 14px;
+    -fx-effect: null;
+    -fx-cursor: hand;
+}
+
+.flock-slider .thumb:hover {
+    -fx-background-color: #22AFAA;
+}
+
+.flock-slider .thumb:pressed {
+    -fx-background-color: #127470;
+}
+
+.flock-slider:focused .thumb {
+    -fx-effect: null;
+}
+
+/* ── Spinner ──────────────────────────────────────────────────────────────── */
+
+.flock-spinner {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #C8CCE0;
+    -fx-border-width: 0.5px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+
+.flock-spinner .text-field {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent;
+    -fx-text-fill: #1E2240;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-font-family: monospace;
+    -fx-alignment: center;
+    -fx-pref-height: 28px;
+}
+
+.flock-spinner .increment-arrow-button,
+.flock-spinner .decrement-arrow-button {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent;
+    -fx-pref-width: 22px;
+}
+
+.flock-spinner .increment-arrow-button:hover,
+.flock-spinner .decrement-arrow-button:hover {
+    -fx-background-color: #EEF0FA;
+}
+
+.flock-spinner .increment-arrow,
+.flock-spinner .decrement-arrow {
+    -fx-background-color: #8892B4;
+    -fx-pref-height: 5px;
+}
+
+.flock-spinner .increment-arrow-button:hover .increment-arrow,
+.flock-spinner .decrement-arrow-button:hover .decrement-arrow {
+    -fx-background-color: #1A8F8A;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+
+.button {
+    -fx-background-color: transparent;
+    -fx-border-color: #C8CCE0;
+    -fx-border-width: 0.5px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #2C3050;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #E4E7F4;
+    -fx-text-fill: #1A1C38;
+}
+
+.button:pressed {
+    -fx-background-color: #D8DCF0;
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+#quit-button {
+    -fx-border-color: #C8CCE0;
+    -fx-text-fill: #2C3050;
+}
+
+#quit-button:hover {
+    -fx-background-color: rgba(200, 50, 50, 0.08);
+    -fx-border-color: rgba(200, 50, 50, 0.35);
+    -fx-text-fill: #C03030;
+}
+
+/* ── Control panel — setting rows ─────────────────────────────────────────── */
+
+.setting-label {
+    -fx-text-fill: #1E2240;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.setting-value {
+    -fx-text-fill: #1A8F8A;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-font-family: "JetBrains Mono", "Consolas", monospace;
+}
+
+/* ── HUD overlay ──────────────────────────────────────────────────────────── */
+
+.hud-label {
+    -fx-text-fill: #7080A8;
+    -fx-font-size: 10px;
+    -fx-font-family: monospace;
+}
+
+.hud-value {
+    -fx-text-fill: #1A8F8A;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-font-family: monospace;
+}
+
+.hud-value-muted {
+    -fx-text-fill: #3A4060;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-font-family: monospace;
+}
+
+.hud-value-running {
+    -fx-text-fill: #1A8F8A;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-font-family: monospace;
+}
+
+/* ── Menu bar (flock-menubar class) ──────────────────────────────────────── */
+
+.flock-menubar {
+    -fx-background-color: #E4E8F4;
+    -fx-border-color: #C8CCE0;
+    -fx-border-width: 0 0 0.5 0;
+    -fx-padding: 0;
+}
+
+.flock-menubar .menu {
+    -fx-padding: 6 12 6 12;
+}
+
+.flock-menubar .menu:hover,
+.flock-menubar .menu:focused,
+.flock-menubar .menu:showing {
+    -fx-background-color: #D8DCF0;
+}
+
+.flock-menubar .menu .label {
+    -fx-text-fill: #2C3050;
+    -fx-font-size: 13px;
+}
+
+.flock-menubar .context-menu {
+    -fx-background-color: #F4F6FF;
+    -fx-border-color: #C8CCE0;
+    -fx-border-width: 0.5;
+    -fx-padding: 4 0;
+}
+
+.flock-menubar .menu-item {
+    -fx-padding: 6 16;
+}
+
+.flock-menubar .menu-item:focused {
+    -fx-background-color: #DDE0F4;
+}
+
+.flock-menubar .menu-item .label {
+    -fx-text-fill: #2C3050;
+    -fx-font-size: 13px;
+}
+
+.flock-menubar .separator .line {
+    -fx-border-color: #C8CCE0;
+    -fx-border-width: 0.5 0 0 0;
+}
+
+/* CheckMenuItem tick */
+.flock-menubar .check-menu-item:checked .label {
+    -fx-text-fill: #1A8F8A;
+}

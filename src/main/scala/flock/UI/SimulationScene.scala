@@ -7,6 +7,14 @@ import scalafx.scene.layout.BorderPane
 
 class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene:
 
+  private def cssPath(filename: String): String =
+    Option(getClass.getResource(s"/css/$filename")) match
+      case Some(url) => url.toExternalForm
+      case None      => s"file:data/$filename"
+
+  private val darkThemePath  = cssPath("dark-theme.css")
+  private val lightThemePath = cssPath("light-theme.css")
+
   private val mainLayout = new BorderPane():
     padding = Insets(20, 20, 20, 20)
 
@@ -18,19 +26,39 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
   mainLayout.center = flockWindow
   mainLayout.bottom = controlPanel
 
+  this.stylesheets.add(darkThemePath)
   this.root = mainLayout
 
-  // Flock display
+  // ── Flock display ─────────────────────────────────────────────────────────
 
   def sync(flock: Flock): Unit =
     flockWindow.sync(flock.boids)
 
   def render(flock: Flock): Unit =
     flockWindow.render(flock.boids)
-  
-  def onOpen(action: => Unit): Unit   = menuBar.onOpen(action)
-  def onSave(action: => Unit): Unit   = menuBar.onSave(action)
-  def onSaveAs(action: => Unit): Unit = menuBar.onSaveAs(action)
+
+  def updateHud(boidCount: Int, fps: Double, isRunning: Boolean): Unit =
+    flockWindow.updateHud(boidCount, fps, isRunning)
+
+  // ── Menu bar ──────────────────────────────────────────────────────────────
+
+  def onOpen(action: => Unit): Unit              = menuBar.onOpen(action)
+  def onSave(action: => Unit): Unit              = menuBar.onSave(action)
+  def onSaveAs(action: => Unit): Unit            = menuBar.onSaveAs(action)
+  def onToggleHud(action: Boolean => Unit): Unit = menuBar.onToggleHud(action)
+
+  def toggleHud(): Unit = flockWindow.toggleHud()
+
+  def onThemeChange(action: String => Unit): Unit =
+    menuBar.onThemeChange { theme =>
+      this.stylesheets.clear()
+      theme match
+        case "light" => this.stylesheets.add(lightThemePath)
+        case _       => this.stylesheets.add(darkThemePath)
+      action(theme)
+    }
+
+  // ── Control panel ─────────────────────────────────────────────────────────
 
   def onStart(action: => Unit): Unit = controlPanel.onStart(action)
   def onPause(action: => Unit): Unit = controlPanel.onPause(action)
@@ -39,7 +67,7 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
 
   def onFlockSizeChange(action: Int => Unit): Unit           = controlPanel.onFlockSizeChange(action)
   def onSeparationWeightChange(action: Double => Unit): Unit = controlPanel.onSeparationWeightChange(action)
-  def onAlignmentWeightChange(action: Double=> Unit): Unit   = controlPanel.onAlignmentWeightChange(action)
+  def onAlignmentWeightChange(action: Double => Unit): Unit  = controlPanel.onAlignmentWeightChange(action)
   def onCohesionWeightChange(action: Double => Unit): Unit   = controlPanel.onCohesionWeightChange(action)
 
   def onWorldSizeChange(action: (Double, Double) => Unit): Unit =
