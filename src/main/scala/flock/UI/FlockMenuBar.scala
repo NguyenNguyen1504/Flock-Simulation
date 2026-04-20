@@ -1,18 +1,8 @@
 package flock.UI
 
-import scalafx.scene.control.{CheckMenuItem, Label, Menu, MenuBar, MenuItem, SeparatorMenuItem}
+import scalafx.scene.control.{CheckMenuItem, Menu, MenuBar, MenuItem, SeparatorMenuItem}
 
 class FlockMenuBar extends MenuBar:
-
-  // ── Logo ─────────────────────────────────────────────────────────────────
-
-  private val logo = new Label("FLOCK"):
-    styleClass += "menubar-logo"
-
-  private val logoMenu = new Menu(""):
-    styleClass += "menubar-logo-menu"
-    graphic = logo
-    mouseTransparent = true
 
   // ── File menu ─────────────────────────────────────────────────────────────
 
@@ -35,7 +25,7 @@ class FlockMenuBar extends MenuBar:
 
   useSystemMenuBar = false
   styleClass += "flock-menubar"
-  menus = Seq(logoMenu, fileMenu, viewMenu)
+  menus = Seq(fileMenu, viewMenu)
 
   // ── Callbacks ─────────────────────────────────────────────────────────────
 
