@@ -174,3 +174,84 @@
     -fx-font-weight: bold;
     -fx-font-family: monospace;
 }
+
+/* ── Menu bar ─────────────────────────────────────────────────────────────── */
+
+.flock-menubar {
+    -fx-background-color: #0D1117;
+    -fx-border-color: #2E3440;
+    -fx-border-width: 0 0 0.5 0;
+    -fx-padding: 0;
+}
+
+.flock-menubar .menu {
+    -fx-padding: 6 12 6 12;
+}
+
+.flock-menubar .menu:hover,
+.flock-menubar .menu:focused,
+.flock-menubar .menu:showing {
+    -fx-background-color: #1C2030;
+}
+
+.flock-menubar .menu .label {
+    -fx-text-fill: #E0E4EE;
+    -fx-font-size: 13px;
+}
+
+.flock-menubar .context-menu {
+    -fx-background-color: #0D1117;
+    -fx-border-color: #2E3440;
+    -fx-border-width: 0.5;
+    -fx-padding: 4 0;
+}
+
+.flock-menubar .menu-item {
+    -fx-padding: 6 16;
+}
+
+.flock-menubar .menu-item:focused {
+    -fx-background-color: #1C2030;
+}
+
+.flock-menubar .menu-item .label {
+    -fx-text-fill: #E0E4EE;
+    -fx-font-size: 13px;
+}
+
+.flock-menubar .separator .line {
+    -fx-border-color: #2E3440;
+    -fx-border-width: 0.5 0 0 0;
+}
+
+/* Logo — disable click visual feedback */
+-fx-padding: 6 16 6 12 was here
+.menubar-logo-menu {
+    -fx-padding: 6 16 6 12;
+    -fx-opacity: 1;
+}
+
+.menubar-logo-menu:hover,
+.menubar-logo-menu:focused {
+    -fx-background-color: transparent;
+    -fx-cursor: default;
+}
+
+/* Hide the empty label that Menu("") still renders */
+.menubar-logo-menu > .label {
+    -fx-padding: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+}
+
+.menubar-logo {
+    -fx-text-fill: #4ECDC4;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-font-family: monospace;
+}
+
+/* CheckMenuItem tick */
+.flock-menubar .check-menu-item:checked .label {
+    -fx-text-fill: #4ECDC4;
+}
