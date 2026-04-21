@@ -37,7 +37,7 @@ object Main extends JFXApp3:
       minWidth  = 800
       minHeight = 800
       resizable = true
-      
+
     val mainScene        = new SimulationScene(initialFlockSize, constants, stage)
     stage.scene = mainScene
 
@@ -91,9 +91,10 @@ object Main extends JFXApp3:
       mainScene.updateHud(flock.boids.size, 0, isRunning)
     }
 
-    mainScene.onQuit { stage.close() }
+    mainScene.onQuit(isDirty) { stage.close() }        // dirty check handled in scene
 
     mainScene.onFlockSizeChange { n =>
+      isDirty = true
       flock.setSize(n)
       mainScene.sync(flock)
       mainScene.updateHud(n, 0, isRunning)
@@ -130,9 +131,9 @@ object Main extends JFXApp3:
         case Failure(e) => mainScene.showError(e.getMessage)
     }
 
-    mainScene.onSeparationWeightChange { flock.updateSeparationWeight(_) }
-    mainScene.onAlignmentWeightChange  { flock.updateAlignmentWeight(_) }
-    mainScene.onCohesionWeightChange   { flock.updateCohesionWeight(_) }
+    mainScene.onSeparationWeightChange { w => isDirty = true; flock.updateSeparationWeight(w) }
+    mainScene.onAlignmentWeightChange  { w => isDirty = true; flock.updateAlignmentWeight(w) }
+    mainScene.onCohesionWeightChange   { w => isDirty = true; flock.updateCohesionWeight(w) }
 
     mainScene.onWorldSizeChange        { flock.updateWorldSize(_, _) }
 
