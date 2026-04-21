@@ -4,6 +4,7 @@ import flock.logic.{Constants, Flock}
 import scalafx.geometry.Insets
 import scalafx.scene.Scene
 import scalafx.scene.layout.BorderPane
+import scalafx.stage.Stage
 
 /** The top-level [[Scene]] for the simulation window.
  *
@@ -19,7 +20,7 @@ import scalafx.scene.layout.BorderPane
  *  @param initialFlockSize Passed to [[ControlPanel]] to initialize the flock size spinner.
  *  @param constants        Passed to [[ControlPanel]] and [[FlockWindow]] for initial values.
  */
-class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene:
+class SimulationScene(initialFlockSize: Int, constants: Constants, owner: Stage) extends Scene:
 
   /** Resolves a CSS file path, preferring the classpath resource over a fallback file path. */
   private def cssPath(filename: String): String =
@@ -58,7 +59,15 @@ class SimulationScene(initialFlockSize: Int, constants: Constants) extends Scene
 
   // ── Menu bar callbacks ────────────────────────────────────────────────────
 
-  def onOpen(action: => Unit): Unit              = menuBar.onOpen(action)
+  /** Shows the open-file dialog, then calls action with the chosen path.
+   *  Nothing happens if the user cancels. */
+  def onOpen(action: String => Unit): Unit =
+    menuBar.onOpen {
+      FlockFileDialog.showOpen(owner).foreach { file =>
+        action(file.getPath)
+      }
+    }
+
   def onSave(action: => Unit): Unit              = menuBar.onSave(action)
   def onSaveAs(action: => Unit): Unit            = menuBar.onSaveAs(action)
   def onToggleHud(action: Boolean => Unit): Unit = menuBar.onToggleHud(action)
