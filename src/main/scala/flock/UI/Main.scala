@@ -104,19 +104,18 @@ object Main extends JFXApp3:
     // Theme swapping is handled inside SimulationScene; no additional logic needed here.
     mainScene.onThemeChange { _ => }
 
-    mainScene.onOpen {
-      FlockFileDialog.showOpen(stage).foreach { file =>
-        FlockFileIO.loadFlockFromFile(file.getPath) match
-          case Success(f) =>
-            // Update the reset snapshot so RESET returns to the newly loaded flock.
-            originalBoids = f.boids
-            flock.resetWith(originalBoids)
-            mainScene.sync(flock)
-            mainScene.render(flock)
-            mainScene.updateFlockSize(originalBoids.size)
-            mainScene.updateHud(flock.boids.size, 0, isRunning)
-          case Failure(e) => println(s"Load failed: ${e.getMessage}")
-      }
+    mainScene.onOpen { path =>
+      FlockFileIO.loadFlockFromFile(path) match
+        case Success(f) =>
+          originalBoids = f.boids
+          flock.resetWith(originalBoids)
+          mainScene.sync(flock)
+          mainScene.render(flock)
+          mainScene.updateFlockSize(originalBoids.size)
+          mainScene.updateHud(flock.boids.size, 0, isRunning)
+          isDirty = false
+        case Failure(e) =>
+          mainScene.showError(e.getMessage)
     }
 
     mainScene.onSave {
