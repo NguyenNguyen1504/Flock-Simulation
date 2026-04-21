@@ -29,7 +29,6 @@ object Main extends JFXApp3:
 
     val constants        = flock.constants
     val initialFlockSize = flock.boids.size
-    val mainScene        = new SimulationScene(initialFlockSize, constants)
 
     stage = new JFXApp3.PrimaryStage():
       title     = "Flock Simulation"
@@ -38,7 +37,9 @@ object Main extends JFXApp3:
       minWidth  = 800
       minHeight = 800
       resizable = true
-      scene     = mainScene
+      
+    val mainScene        = new SimulationScene(initialFlockSize, constants, stage)
+    stage.scene = mainScene
 
     mainScene.sync(flock)
     mainScene.render(flock)
@@ -46,6 +47,7 @@ object Main extends JFXApp3:
 
     var lastTime  = 0L
     var isRunning = false
+    var isDirty = false
 
     // Rolling FPS buffer: summed and averaged each frame to smooth out spikes.
     val fpsBuffer = Array.fill(30)(0.0)
