@@ -88,7 +88,10 @@ class SimulationScene(initialFlockSize: Int, constants: Constants, owner: Stage)
       }
     }
 
-
+  /** Shows an error dialog. Called by Main after a failed load or save. */
+  def showError(message: String): Unit =
+    FlockFileDialog.showError(owner, message)
+    
   def onToggleHud(action: Boolean => Unit): Unit = menuBar.onToggleHud(action)
 
   def toggleHud(): Unit = flockWindow.toggleHud()
