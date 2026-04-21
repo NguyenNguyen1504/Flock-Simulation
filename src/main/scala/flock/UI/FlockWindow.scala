@@ -88,7 +88,7 @@ class FlockWindow(constants: Constants) extends Pane:
 
   // ── Sync / Render ─────────────────────────────────────────────────────────
 
-  /** Sync the shape pool with the current boid list.
+  /** Syncs the shape pool with the current boid list.
    *  Adds new polygon nodes if the flock grew, removes trailing ones if it shrank.
    *  Must be called before [[render]] whenever the boid count changes.
    */
