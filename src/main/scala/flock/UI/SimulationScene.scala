@@ -88,6 +88,7 @@ class SimulationScene(initialFlockSize: Int, constants: Constants, owner: Stage)
       }
     }
 
+
   def onToggleHud(action: Boolean => Unit): Unit = menuBar.onToggleHud(action)
 
   def toggleHud(): Unit = flockWindow.toggleHud()
@@ -107,7 +108,19 @@ class SimulationScene(initialFlockSize: Int, constants: Constants, owner: Stage)
   def onStart(action: => Unit): Unit = controlPanel.onStart(action)
   def onPause(action: => Unit): Unit = controlPanel.onPause(action)
   def onReset(action: => Unit): Unit = controlPanel.onReset(action)
-  def onQuit(action: => Unit): Unit  = controlPanel.onQuit(action)
+
+  /** Shows a confirmation dialog when there are unsaved changes, then calls action if confirmed.
+   *  Pass isDirty=false to skip the dialog and close immediately. */
+  def onQuit(isDirty: => Boolean)(action: => Unit): Unit =
+    controlPanel.onQuit {
+      val shouldClose = !isDirty || FlockFileDialog.showConfirmation(
+        owner,
+        titleStr = "Quit",
+        header   = "Unsaved changes",
+        content  = "You have unsaved changes. Quit anyway?"
+      )
+      if shouldClose then action
+    }
 
   def onFlockSizeChange(action: Int => Unit): Unit           = controlPanel.onFlockSizeChange(action)
   def onSeparationWeightChange(action: Double => Unit): Unit = controlPanel.onSeparationWeightChange(action)
