@@ -68,7 +68,16 @@ class SimulationScene(initialFlockSize: Int, constants: Constants, owner: Stage)
       }
     }
 
-  def onSave(action: => Unit): Unit              = menuBar.onSave(action)
+  /** Shows a save-overwrite confirmation, then calls action if the user confirms. */
+  def onSave(action: => Unit): Unit =
+    menuBar.onSave {
+      if FlockFileDialog.showConfirmation(
+        owner,
+        titleStr = "Save",
+        header   = "Overwrite save.json?",
+        content  = "This will overwrite data/save.json. Continue?"
+      ) then action
+    }
   def onSaveAs(action: => Unit): Unit            = menuBar.onSaveAs(action)
   def onToggleHud(action: Boolean => Unit): Unit = menuBar.onToggleHud(action)
 
