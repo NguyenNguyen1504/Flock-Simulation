@@ -104,7 +104,7 @@ class SpinnerSetting(val labelName: String, minValue: Int, maxValue: Int, initia
   def onChange(action: Int => Unit): Unit =
     spinner.valueProperty().onChange((_, _, v) => action(v))
 
-  /** Sets the spinner to a specific value (e.g. after a flock reset). */
+  /** Programmatically sets the spinner to a specific value (e.g. after a flock reset). */
   def setValue(n: Int): Unit =
     spinner.valueFactory().value() = n
 
