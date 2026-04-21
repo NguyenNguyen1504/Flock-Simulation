@@ -118,10 +118,10 @@ object Main extends JFXApp3:
           mainScene.showError(e.getMessage)
     }
 
-    mainScene.onSave {
+    mainScene.onSave {                                 // confirmation already handled in scene
       FlockFileIO.saveFlockToFile(flock, "data/save.json") match
-        case Success(_) => println("Saved successfully")
-        case Failure(e) => println(s"Save failed: ${e.getMessage}")
+        case Success(_) => isDirty = false
+        case Failure(e) => mainScene.showError(e.getMessage)
     }
 
     mainScene.onSaveAs {
