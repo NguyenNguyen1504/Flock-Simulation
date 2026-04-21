@@ -7,15 +7,24 @@ import scalafx.application.JFXApp3
 import scala.collection.mutable.ArrayBuffer
 import scala.util.{Failure, Success}
 
+/** Application entry point. Initializes the flock, builds the UI, and runs the simulation loop.
+ *
+ *  The simulation is driven by a JavaFX [[AnimationTimer]] which fires each frame.
+ *  FPS is smoothed over a rolling 30-frame window to avoid display jitter.
+ *  All user interactions are wired here by registering callbacks on [[SimulationScene]].
+ */
 object Main extends JFXApp3:
 
   def start() =
+
+    // Attempt to load a default flock; fall back to an empty flock on failure.
     val flock = FlockFileIO.loadFlockFromFile("data/testui.json") match
       case Success(f) => f
       case Failure(e) =>
         println(s"Error in loading file: ${e.getMessage}")
         new Flock(ArrayBuffer.empty)
 
+    // Snapshot of the original boid state, used by the RESET action.
     var originalBoids = flock.boids
 
     val constants        = flock.constants
@@ -38,13 +47,14 @@ object Main extends JFXApp3:
     var lastTime  = 0L
     var isRunning = false
 
-    // FPS smoothing: rolling average over ~30 frames
+    // Rolling FPS buffer: summed and averaged each frame to smooth out spikes.
     val fpsBuffer = Array.fill(30)(0.0)
     var fpsIndex  = 0
 
+    // Each frame: compute delta time, step the simulation, re-render, and update the HUD.
     val timer = AnimationTimer { now =>
       if lastTime != 0L then
-        val dt  = (now - lastTime) / 1_000_000_000.0
+        val dt  = (now - lastTime) / 1_000_000_000.0  // Convert nanoseconds to seconds
         flock.update(dt)
         mainScene.render(flock)
 
@@ -68,7 +78,7 @@ object Main extends JFXApp3:
     mainScene.onPause {
       isRunning = false
       timer.stop()
-      lastTime = 0L
+      lastTime = 0L  // Reset so the next start doesn't compute a huge delta from the pause gap.
       mainScene.updateHud(flock.boids.size, 0, isRunning)
     }
 
@@ -89,12 +99,14 @@ object Main extends JFXApp3:
 
     mainScene.onToggleHud { _ => mainScene.toggleHud() }
 
-    mainScene.onThemeChange { _ => /* theme swap handled inside SimulationScene */ }
+    // Theme swapping is handled inside SimulationScene; no additional logic needed here.
+    mainScene.onThemeChange { _ => }
 
     mainScene.onOpen {
       FlockFileDialog.showOpen(stage).foreach { file =>
         FlockFileIO.loadFlockFromFile(file.getPath) match
           case Success(f) =>
+            // Update the reset snapshot so RESET returns to the newly loaded flock.
             originalBoids = f.boids
             flock.resetWith(originalBoids)
             mainScene.sync(flock)
