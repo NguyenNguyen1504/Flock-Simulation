@@ -74,11 +74,10 @@ class SimulationScene(initialFlockSize: Int, constants: Constants, owner: Stage)
       if FlockFileDialog.showConfirmation(
         owner,
         titleStr = "Save",
-        header   = "Overwrite save.json?",
         content  = "This will overwrite data/save.json. Continue?"
       ) then action
     }
-    
+
   /** Shows the save-as dialog, then calls action with the chosen path.
    *  Nothing happens if the user cancels. */
   def onSaveAs(action: String => Unit): Unit =
@@ -91,7 +90,7 @@ class SimulationScene(initialFlockSize: Int, constants: Constants, owner: Stage)
   /** Shows an error dialog. Called by Main after a failed load or save. */
   def showError(message: String): Unit =
     FlockFileDialog.showError(owner, message)
-    
+
   def onToggleHud(action: Boolean => Unit): Unit = menuBar.onToggleHud(action)
 
   def toggleHud(): Unit = flockWindow.toggleHud()
@@ -119,7 +118,6 @@ class SimulationScene(initialFlockSize: Int, constants: Constants, owner: Stage)
       val shouldClose = !isDirty || FlockFileDialog.showConfirmation(
         owner,
         titleStr = "Quit",
-        header   = "Unsaved changes",
         content  = "You have unsaved changes. Quit anyway?"
       )
       if shouldClose then action

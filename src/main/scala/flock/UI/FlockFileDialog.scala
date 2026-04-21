@@ -39,17 +39,17 @@ object FlockFileDialog:
   def showError(parentStage: Stage, message: String): Unit =
     new Alert(AlertType.Error) {
       initOwner(parentStage)
-      title = "Error"
-      headerText = "File I/O failed"
+      title = "Error: File I/O failed"
+      headerText = None
       contentText = message
     }.showAndWait()
 
   /** Shows a confirmation dialog when user saves or quits. */
-  def showConfirmation(parentStage: Stage, titleStr: String, header: String, content: String): Boolean =
+  def showConfirmation(parentStage: Stage, titleStr: String, content: String): Boolean =
     val alert = new Alert(AlertType.Confirmation) {
       initOwner(parentStage)
       title = titleStr
-      headerText = header
+      headerText = None
       contentText = content
     }
     // Returns `true` if user clicks `OK`
