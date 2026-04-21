@@ -1,0 +1,189 @@
+@startuml
+left to right direction
+skinparam nodesep 100
+skinparam ranksep 100
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+
+package flock.logic {
+  class Vector2D {
+    + x: Double
+    + y: Double
+    + +(another: Vector2D): Vector2D
+    + -(another: Vector2D): Vector2D
+    + *(factor: Double): Vector2D
+    + magnitude(): Double
+    + magnitudeSquared(): Double
+    + normalize(): Vector2D
+    + truncate(maxLength: Double): Vector2D
+    + dot(another: Vector2D): Double
+    + angle(another: Vector2D): Double
+  }
+
+  class Boid {
+    - _position: Vector2D
+    - _velocity: Vector2D
+    + position: Vector2D
+    + velocity: Vector2D
+    + distanceSquared(another: Boid): Double
+    + angle(another: Boid): Double
+    + applyForce(force: Vector2D): Unit
+    + wrapAround(constants: Constants): Unit
+    + update(deltaTime: Double, constants: Constants): Unit
+  }
+
+  class Constants << (C, lightgrey) case class >> {
+    + perceptionRadius: Double
+    + perceptionAngle: Double
+    + minSeparationDistance: Double
+    + maxSpeed: Double
+    + maxSteeringForce: Double
+    + separationWeight: Double
+    + alignmentWeight: Double
+    + cohesionWeight: Double
+    + mass: Double
+    + worldWidth: Double
+    + worldHeight: Double
+    + minFlockSize: Int
+    + maxFlockSize: Int
+  }
+
+  interface SteeringBehavior << trait >> {
+    + apply(boid: Boid, allBoids: Seq[Boid], c: Constants): Vector2D
+    + weight(c: Constants): Double
+    # perceptionNeighbors(boid: Boid, allBoids: Seq[Boid], c: Constants): Seq[Boid]
+  }
+
+  class Separation << (O, white) object >>
+  class Alignment << (O, white) object >>
+  class Cohesion << (O, white) object >>
+
+  SteeringBehavior <|.. Separation
+  SteeringBehavior <|.. Alignment
+  SteeringBehavior <|.. Cohesion
+
+  class Flock {
+    - _boids: ArrayBuffer[Boid]
+    - behaviors: Seq[SteeringBehavior]
+    - _constants: Constants
+    + boids: Seq[Boid]
+    + addBoid(boid: Boid): Unit
+    + removeBoid(boid: Boid): Unit
+    + addRandomBoid(): Unit
+    + removeRandomBoid(): Unit
+    + addRandomBoids(n: Int): Unit
+    + removeRandomBoids(n: Int): Unit
+    + resetWith(newBoids: Seq[Boid]): Unit
+    + update(deltaTime: Double): Unit
+    + constants: Constants
+    + updateConstants(newConstants: Constants): Unit
+    + updateSeparationWeight(w: Double): Unit
+    + updateAlignmentWeight(w: Double): Unit
+    + updateCohesionWeight(w: Double): Unit
+    + updateWorldSize(w: Double, h: Double): Unit
+    + setSize(newSize: Int): Unit
+  }
+
+  class FlockFileIO << (O, white) object >> {
+    + loadFlockFromFile(filename: String): Try[Flock]
+    + saveFlockToFile(flock: Flock, filename: String): Try[Unit]
+  }
+
+  Boid "1" *-- "2" Vector2D : position, velocity
+  Flock "1" *-- "*" Boid
+  Flock "1" *-- "1" Constants
+  Flock "1" *-- "*" SteeringBehavior
+  FlockFileIO ..> Flock : loads/saves
+}
+
+package flock.UI {
+
+  class Main << (O, white) object >> {
+    + start(): Unit
+  }
+
+  class SimulationScene {
+    + sync(flock: Flock): Unit
+    + render(flock: Flock): Unit
+    + updateHud(boidCount: Int, fps: Double, isRunning: Boolean): Unit
+    + onOpen(action: String => Unit): Unit
+    + onSave(action: => Unit): Unit
+    + onSaveAs(action: String => Unit): Unit
+    + showError(message: String): Unit
+    + onToggleHud(action: Boolean => Unit): Unit
+    + toggleHud(): Unit
+    + onThemeChange(action: String => Unit): Unit
+    + onStart(action: => Unit): Unit
+    + onPause(action: => Unit): Unit
+    + onReset(action: => Unit): Unit
+    + onQuit(isDirty: => Boolean)(action: => Unit): Unit
+    + onFlockSizeChange(action: Int => Unit): Unit
+    + onSeparationWeightChange(action: Double => Unit): Unit
+    + onAlignmentWeightChange(action: Double => Unit): Unit
+    + onCohesionWeightChange(action: Double => Unit): Unit
+    + onWorldSizeChange(action: (Double, Double) => Unit): Unit
+    + updateFlockSize(n: Int): Unit
+  }
+
+  class FlockWindow {
+    - boidShapes: ArrayBuffer[Polygon]
+    + sync(boids: Seq[Boid]): Unit
+    + render(boids: Seq[Boid]): Unit
+    + updateHud(boidCount: Int, fps: Double, isRunning: Boolean): Unit
+    + toggleHud(): Unit
+  }
+
+  class ControlPanel {
+    + onStart(action: => Unit): Unit
+    + onPause(action: => Unit): Unit
+    + onReset(action: => Unit): Unit
+    + onQuit(action: => Unit): Unit
+    + onFlockSizeChange(action: Int => Unit): Unit
+    + onSeparationWeightChange(action: Double => Unit): Unit
+    + onAlignmentWeightChange(action: Double => Unit): Unit
+    + onCohesionWeightChange(action: Double => Unit): Unit
+    + setFlockSize(n: Int): Unit
+  }
+
+  class FlockMenuBar {
+    + onOpen(action: => Unit): Unit
+    + onSave(action: => Unit): Unit
+    + onSaveAs(action: => Unit): Unit
+    + onToggleHud(action: Boolean => Unit): Unit
+    + onThemeChange(action: String => Unit): Unit
+  }
+
+  class FlockFileDialog << (O, white) object >> {
+    + showOpen(owner: Stage): Option[File]
+    + showSaveAs(owner: Stage): Option[File]
+    + showError(parentStage: Stage, message: String): Unit
+    + showConfirmation(parentStage: Stage, titleStr: String, content: String): Boolean
+  }
+
+  interface Setting << trait >> {
+    + labelName: String
+  }
+
+  class SliderSetting {
+    + onChange(action: Double => Unit): Unit
+  }
+
+  class SpinnerSetting {
+    + onChange(action: Int => Unit): Unit
+    + setValue(n: Int): Unit
+  }
+
+  Setting <|-- SliderSetting
+  Setting <|-- SpinnerSetting
+  ControlPanel *-- "4" Setting : contains
+
+  Main ---> SimulationScene : drives
+  Main ---> Flock : mutates state
+  SimulationScene *-- "1" FlockWindow
+  SimulationScene *-- "1" ControlPanel
+  SimulationScene *-- "1" FlockMenuBar
+  SimulationScene ..> FlockFileDialog : uses
+}
+
+@enduml
