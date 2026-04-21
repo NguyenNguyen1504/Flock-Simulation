@@ -78,7 +78,16 @@ class SimulationScene(initialFlockSize: Int, constants: Constants, owner: Stage)
         content  = "This will overwrite data/save.json. Continue?"
       ) then action
     }
-  def onSaveAs(action: => Unit): Unit            = menuBar.onSaveAs(action)
+    
+  /** Shows the save-as dialog, then calls action with the chosen path.
+   *  Nothing happens if the user cancels. */
+  def onSaveAs(action: String => Unit): Unit =
+    menuBar.onSaveAs {
+      FlockFileDialog.showSaveAs(owner).foreach { file =>
+        action(file.getPath)
+      }
+    }
+
   def onToggleHud(action: Boolean => Unit): Unit = menuBar.onToggleHud(action)
 
   def toggleHud(): Unit = flockWindow.toggleHud()
