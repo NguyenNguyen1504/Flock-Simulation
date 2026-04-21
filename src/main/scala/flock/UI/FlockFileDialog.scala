@@ -1,7 +1,10 @@
 package flock.UI
 
+import scalafx.scene.control.{Alert, ButtonType}
+import scalafx.scene.control.Alert.AlertType
 import scalafx.stage.{FileChooser, Stage}
 import scalafx.stage.FileChooser.ExtensionFilter
+
 import java.io.File
 
 /** Utility object for showing native file-chooser dialogs scoped to JSON flock files.
@@ -31,5 +34,27 @@ object FlockFileDialog:
     val fc = makeChooser("Save Flock As")
     fc.initialFileName = "save.json"
     Option(fc.showSaveDialog(owner))
+
+  /** Shows an error dialog when file I/O is failed. */
+  def showError(parentStage: Stage, message: String): Unit =
+    new Alert(AlertType.Error) {
+      initOwner(parentStage)
+      title = "Error"
+      headerText = "File I/O failed"
+      contentText = message
+    }.showAndWait()
+
+  /** Shows a confirmation dialog when user saves or quits. */
+  def showConfirmation(parentStage: Stage, titleStr: String, header: String, content: String): Boolean =
+    val alert = new Alert(AlertType.Confirmation) {
+      initOwner(parentStage)
+      title = titleStr
+      headerText = header
+      contentText = content
+    }
+    // Returns `true` if user clicks `OK`
+    alert.showAndWait() match
+      case Some(ButtonType.OK) => true
+      case _                   => false
 
 end FlockFileDialog
