@@ -124,12 +124,10 @@ object Main extends JFXApp3:
         case Failure(e) => mainScene.showError(e.getMessage)
     }
 
-    mainScene.onSaveAs {
-      FlockFileDialog.showSaveAs(stage).foreach { file =>
-        FlockFileIO.saveFlockToFile(flock, file.getPath) match
-          case Success(_) => println("Saved successfully")
-          case Failure(e) => println(s"Save failed: ${e.getMessage}")
-      }
+    mainScene.onSaveAs { path =>                       // path: String, no file dialog here
+      FlockFileIO.saveFlockToFile(flock, path) match
+        case Success(_) => isDirty = false
+        case Failure(e) => mainScene.showError(e.getMessage)
     }
 
     mainScene.onSeparationWeightChange { flock.updateSeparationWeight(_) }
